@@ -1,0 +1,63 @@
+"use server";
+import { prisma } from "@/lib/prisma";
+import { Prisma } from "@/prisma/generated/prisma";
+import {
+  BannerSliderInput,
+  bannerSliderSchema,
+} from "../validations/banner.validation";
+
+// Create BannerSlider
+export async function createBannerSlider(data: BannerSliderInput) {
+  const parsedData = bannerSliderSchema.parse(data);
+
+  const banner = await prisma.bannerSlider.create({
+    data: {
+      image: parsedData.image,
+      link: parsedData.link ?? null,
+      isActive: parsedData.isActive,
+    },
+  });
+
+  return banner;
+}
+
+// Update BannerSlider
+export async function updateBannerSlider(id: string, data: BannerSliderInput) {
+  const parsedData = bannerSliderSchema.parse(data);
+
+  const banner = await prisma.bannerSlider.update({
+    where: { id },
+    data: {
+      image: parsedData.image,
+      link: parsedData.link ?? null,
+      isActive: parsedData.isActive,
+    },
+  });
+
+  return banner;
+}
+
+// Delete BannerSlider
+export async function deleteBannerSlider(id: string) {
+  const banner = await prisma.bannerSlider.delete({
+    where: { id },
+  });
+
+  return banner;
+}
+
+export async function getBannerSliders({
+  isActive = "all",
+}: {
+  isActive: "true" | "false" | "all";
+}) {
+  const where: Prisma.BannerSliderWhereInput = {};
+  if (isActive !== "all") {
+    where.isActive = isActive === "true" ? true : false;
+  }
+
+  // --- DB Queries ---
+  return await prisma.bannerSlider.findMany({
+    where,
+  });
+}

@@ -1,0 +1,50 @@
+import { format } from "date-fns";
+
+interface SectionProps {
+  receiptNumber: string;
+  orderId: string;
+  issuedDate: Date;
+  paymentDate: Date;
+  dueDate?: Date;
+  paidAmount: number;
+}
+export default function ReceiptInfo({
+  receiptNumber,
+  issuedDate,
+  paidAmount,
+  orderId,
+  paymentDate,
+}: SectionProps) {
+  return (
+    <div>
+      <table className="text-sm">
+        <tbody>
+          <tr>
+            <td className="font-bold pr-2">Receipt Number:</td>
+            <td>{receiptNumber}</td>
+          </tr>
+          <tr>
+            <td className="font-bold pr-2">Order Number:</td>
+            <td>{orderId}</td>
+          </tr>
+          <tr>
+            <td className="font-bold pr-2">Issued Date :</td>
+            <td>{format(issuedDate, "MMMM d, yyyy")}</td>
+          </tr>
+          <tr>
+            <td className="font-bold pr-2">Payment Date :</td>
+            <td>{format(paymentDate, "MMMM d, yyyy")}</td>
+          </tr>
+
+          <tr>
+            <td colSpan={2}>
+              <div className="mt-2 bg-gray-200 font-bold py-1 px-2">
+                Paid Amount (BDT): {paidAmount}
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+}
