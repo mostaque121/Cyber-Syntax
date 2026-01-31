@@ -39,7 +39,7 @@ export function ProfileSection() {
   if (!session) {
     return (
       <Link
-        href="/signin"
+        href="/login"
         className="flex items-center space-x-1 focus:outline-none hover:opacity-80 transition-opacity"
       >
         <Avatar className="h-7 w-7 lg:h-8 lg:w-8">
@@ -91,7 +91,7 @@ export function ProfileSection() {
           <Link href="/settings">Settings</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild onClick={handleLogout}>
+        <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
           Logout
         </DropdownMenuItem>
       </DropdownMenuContent>

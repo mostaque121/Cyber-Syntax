@@ -14,9 +14,11 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { FileText } from "lucide-react";
+import { FileText, Wrench } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { ProductCardType } from "../../card/product-card";
 
 type SearchModalProps = {
   open: boolean;
@@ -29,6 +31,7 @@ type SearchModalProps = {
 type SearchItem = {
   title: string;
   url: string;
+  image?: string;
 };
 
 type Section = {
@@ -39,55 +42,95 @@ type Section = {
 };
 
 // -------------------
-// Search Sections
+// Static Sections (Pages & Services)
 // -------------------
-const sections: Section[] = [
-  {
-    category: "Pages",
-    icon: FileText,
-    items: [
-      { title: "Home", url: "/" },
-      { title: "About Us", url: "/about-us" },
-      { title: "About Rpl", url: "/about-rpl" },
-      { title: "Contact", url: "/contact" },
-      { title: "FAQ", url: "/faq" },
-      { title: "Reviews", url: "/reviews" },
-      { title: "Write a Review", url: "/write-review" },
-      { title: "Privacy Policy", url: "/privacy-policy" },
-      { title: "Terms of Service", url: "/terms-of-service" },
-      { title: "Cookie Policy", url: "/cookie-policy" },
-      { title: "Refund Policy", url: "/refund-policy" },
-    ],
-  },
-  // Future sections like products or qualifications can be added here
+const pageItems: SearchItem[] = [
+  { title: "Home", url: "/" },
+  { title: "About Us", url: "/about-us" },
+  { title: "Contact", url: "/contact" },
+  { title: "Products", url: "/products" },
+  { title: "Services", url: "/services" },
+  { title: "Privacy Policy", url: "/privacy-policy" },
+  { title: "Terms of Service", url: "/terms-of-service" },
+  { title: "Cookie Policy", url: "/cookie-policy" },
+  { title: "Refund Policy", url: "/refund-policy" },
 ];
 
-// -------------------
-// Build Search Data
-// -------------------
-const buildSearchData = (data: Section[]): Section[] => data;
+const serviceItems: SearchItem[] = [
+  { title: "CCTV Camera Installation", url: "/services#cctv" },
+  { title: "IT Support & Maintenance", url: "/services#it-support" },
+  { title: "Software Development", url: "/services#software" },
+  { title: "Networking Solutions", url: "/services#networking" },
+];
 
 // -------------------
 // SearchModal Component
 // -------------------
-export default function SearchModal({ open, onOpenChange }: SearchModalProps) {
+export default function SearchModal({
+  open,
+  onOpenChange,
+  products,
+}: SearchModalProps & { products?: ProductCardType[] }) {
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Derived search results using useMemo to avoid setState in effect
+  // Build search results with Pages, Products, and Services
   const searchResults = useMemo(() => {
-    if (!searchQuery.trim()) return buildSearchData(sections);
+    const query = searchQuery.toLowerCase().trim();
 
-    const query = searchQuery.toLowerCase();
+    // Filter pages
+    const filteredPages = query
+      ? pageItems.filter((item) => item.title.toLowerCase().includes(query))
+      : pageItems.slice(0, 5);
 
-    return buildSearchData(sections)
-      .map((category) => {
-        const filteredItems = category.items.filter((item) =>
-          item.title.toLowerCase().includes(query)
-        );
-        return { ...category, items: filteredItems };
-      })
-      .filter((category) => category.items.length > 0);
-  }, [searchQuery]);
+    // Filter services
+    const filteredServices = query
+      ? serviceItems.filter((item) => item.title.toLowerCase().includes(query))
+      : serviceItems;
+
+    // Filter products
+    const productItems: SearchItem[] = (products || []).map((p) => {
+      const featuredImage =
+        p.images.find((img) => img.isFeatured) || p.images[0];
+      return {
+        title: p.title,
+        url: `/product/${p.slug}`,
+        image: featuredImage?.url,
+      };
+    });
+
+    const filteredProducts = query
+      ? productItems
+          .filter((item) => item.title.toLowerCase().includes(query))
+          .slice(0, 6)
+      : productItems.slice(0, 4);
+
+    const sections: Section[] = [];
+
+    if (filteredPages.length > 0) {
+      sections.push({
+        category: "Pages",
+        icon: FileText,
+        items: filteredPages,
+      });
+    }
+
+    if (filteredProducts.length > 0) {
+      sections.push({
+        category: "Products",
+        items: filteredProducts,
+      });
+    }
+
+    if (filteredServices.length > 0) {
+      sections.push({
+        category: "Services",
+        icon: Wrench,
+        items: filteredServices,
+      });
+    }
+
+    return sections;
+  }, [searchQuery, products]);
 
   // Keyboard shortcut: Cmd+K / Ctrl+K
   useEffect(() => {
@@ -118,7 +161,7 @@ export default function SearchModal({ open, onOpenChange }: SearchModalProps) {
 
         <Command className="rounded-lg border py-2! shadow-md">
           <CommandInput
-            placeholder="Search qualifications, industries, pages..."
+            placeholder="Search pages, products, services..."
             value={searchQuery}
             onValueChange={setSearchQuery}
             className="h-12 py-5"
@@ -140,7 +183,17 @@ export default function SearchModal({ open, onOpenChange }: SearchModalProps) {
                         onSelect={() => onOpenChange(false)}
                         className="flex cursor-pointer items-center gap-2 py-2"
                       >
-                        {Icon && <Icon className="h-4 w-4 text-emerald-500" />}
+                        {item.image ? (
+                          <Image
+                            src={item.image}
+                            alt={item.title}
+                            width={24}
+                            height={24}
+                            className="h-6 w-6 rounded object-cover"
+                          />
+                        ) : (
+                          Icon && <Icon className="h-4 w-4 text-emerald-500" />
+                        )}
                         <span>{item.title}</span>
                       </CommandItem>
                     </Link>

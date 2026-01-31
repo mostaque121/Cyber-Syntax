@@ -1,8 +1,21 @@
 import { notFound } from "next/navigation";
-import { getProductBySlug } from "../../actions/product-actions";
+import {
+  getAllProducts,
+  getProductBySlug,
+} from "../../actions/product-actions";
 import { ProductBreadcrumb } from "../components/product-bredcrumb";
 import { ProductDetails } from "../components/product-details";
 import { ProductImages } from "../components/product-images";
+
+// Generate static params for all products
+export async function generateStaticParams() {
+  const products = await getAllProducts();
+
+  return products.map((product) => ({
+    slug: product.slug,
+  }));
+}
+
 export default async function Page({
   params,
 }: {
@@ -38,6 +51,12 @@ export default async function Page({
           isHotDeal={product.isHotDeal}
         />
       </div>
+      {product.longDescription && (
+        <div
+          className="py-16"
+          dangerouslySetInnerHTML={{ __html: product.longDescription }}
+        />
+      )}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 "use server";
+import { checkAccess } from "@/lib/check-access";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/prisma/generated/prisma";
 import {
@@ -8,6 +9,10 @@ import {
 
 // Create BannerSlider
 export async function createBannerSlider(data: BannerSliderInput) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   const parsedData = bannerSliderSchema.parse(data);
 
   const banner = await prisma.bannerSlider.create({
@@ -23,6 +28,10 @@ export async function createBannerSlider(data: BannerSliderInput) {
 
 // Update BannerSlider
 export async function updateBannerSlider(id: string, data: BannerSliderInput) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   const parsedData = bannerSliderSchema.parse(data);
 
   const banner = await prisma.bannerSlider.update({
@@ -39,6 +48,10 @@ export async function updateBannerSlider(id: string, data: BannerSliderInput) {
 
 // Delete BannerSlider
 export async function deleteBannerSlider(id: string) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   const banner = await prisma.bannerSlider.delete({
     where: { id },
   });

@@ -1,21 +1,23 @@
 import { CartProvider } from "@/contexts/cart-provider";
 import { Suspense } from "react";
+import { getAllProducts } from "./actions/product-actions";
 import { CartDrawer } from "./components/cart-drawer/cart-drawer";
 import Footer from "./components/layout/footer";
-import NextHandNavbar from "./components/layout/navbar";
+import Navbar from "./components/layout/navbar";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const AllProducts = await getAllProducts();
   return (
     <CartProvider>
       <Suspense fallback={null}>
         <CartDrawer />
       </Suspense>
 
-      <NextHandNavbar />
+      <Navbar products={AllProducts ?? []} />
       {children}
       <Footer />
     </CartProvider>

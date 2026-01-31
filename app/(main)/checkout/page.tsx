@@ -2,6 +2,7 @@
 "use client";
 
 import { useCart } from "@/contexts/cart-provider"; // Adjust path as needed
+import { authClient } from "@/lib/auth-client";
 import { useEffect, useMemo, useState } from "react";
 import { createProductOrder } from "../actions/product-order-action"; // Adjust path
 import { CartItemType } from "../types/cart-items.types"; // Adjust path
@@ -18,6 +19,8 @@ import { TrustIndicators } from "./components/trust-indicators";
 
 export default function CheckoutPage() {
   const { cart, isLoading, removeItems } = useCart();
+  const { data: session } = authClient.useSession();
+  const isLoggedIn = !!session?.user;
 
   // Local state for items allows us to handle price updates from server
   // without waiting for a full cart refetch
@@ -55,19 +58,19 @@ export default function CheckoutPage() {
   // Toggle Checkbox logic
   const handleItemToggle = (id: string) => {
     setSelectedIds((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
     );
   };
 
   // Calculations
   const selectedItems = useMemo(
     () => localItems.filter((item) => selectedIds.includes(item.id)),
-    [localItems, selectedIds]
+    [localItems, selectedIds],
   );
 
   const subtotal = selectedItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
-    0
+    0,
   );
   const shipping = selectedItems.length === 0 ? 0 : isInsideDhaka ? 50 : 100;
   const total = subtotal + shipping;
@@ -102,7 +105,7 @@ export default function CheckoutPage() {
           // Deselect unavailable items automatically so user can proceed
           if (res.missingProducts) {
             setSelectedIds((prev) =>
-              prev.filter((id) => !res.missingProducts!.includes(id))
+              prev.filter((id) => !res.missingProducts!.includes(id)),
             );
           }
           setErrorMsg(res.error ?? "Some items are unavailable.");
@@ -117,10 +120,10 @@ export default function CheckoutPage() {
             setLocalItems((prev) =>
               prev.map((item) => {
                 const update = res.updates?.find(
-                  (u: any) => u.productId === item.productId
+                  (u: any) => u.productId === item.productId,
                 );
                 return update ? { ...item, price: update.newPrice } : item;
-              })
+              }),
             );
           }
           setErrorMsg(res.error ?? "Prices have changed.");
@@ -148,7 +151,12 @@ export default function CheckoutPage() {
   // ✅ Success View
   if (orderId) {
     return (
-      <CheckoutSuccess orderId={orderId} total={total} email={successEmail} />
+      <CheckoutSuccess
+        orderId={orderId}
+        total={total}
+        email={successEmail}
+        isLoggedIn={isLoggedIn}
+      />
     );
   }
 

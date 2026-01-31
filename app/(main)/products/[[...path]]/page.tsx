@@ -1,5 +1,7 @@
 import { getAllProducts } from "../../actions/product-actions";
 import { ProductList } from "../components/product-list";
+import { ProductsCTASection } from "../components/products-cta-section";
+import { ProductsTrustSection } from "../components/products-trust-section";
 
 // 1. GENERATE STATIC PATHS
 // This tells Next.js to pre-build a page for every category found in your DB
@@ -8,7 +10,7 @@ export async function generateStaticParams() {
 
   // Extract unique category paths (e.g., "men", "men/shoes")
   const uniquePaths = new Set(
-    products.map((p) => p.category?.fullPath).filter(Boolean)
+    products.map((p) => p.category?.fullPath).filter(Boolean),
   );
 
   // Return array format required by Next.js: [{ path: [] }, { path: ['men'] }]
@@ -37,7 +39,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   if (fullPath) {
     displayedProducts = allProducts.filter((p) =>
-      p.category?.fullPath?.startsWith(fullPath)
+      p.category?.fullPath?.startsWith(fullPath),
     );
   }
 
@@ -47,6 +49,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
     : "All Products";
 
   return (
-    <ProductList initialProducts={displayedProducts} categoryName={pageTitle} />
+    <div className="container mx-auto md:px-8 py-6 px-4">
+      <ProductList
+        initialProducts={displayedProducts}
+        categoryName={pageTitle}
+      />
+      <ProductsTrustSection />
+
+      <ProductsCTASection />
+    </div>
   );
 }

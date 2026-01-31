@@ -69,14 +69,9 @@ export function ServicesList() {
 
   return (
     <section className="mb-16">
-      <div className="text-center mb-10">
-        <h2 className="text-3xl font-bold text-gray-900 mb-3">
-          What We Provide
-        </h2>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          Professional technology services delivered by experienced technicians
-        </p>
-      </div>
+      <h2 className="text-[18px] uppercase pb-4 px-1 mb-4 md:text-[32px] border-b border-[#dee2e6] font-bold text-black">
+        What we provide
+      </h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {services.map((service, index) => {

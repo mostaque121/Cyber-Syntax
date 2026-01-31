@@ -16,14 +16,14 @@ export default function AboutUsPage() {
 
       {/* Mission Vision - Gray */}
       <div className="bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
           <MissionVision />
         </div>
       </div>
 
       {/* Services Overview - White */}
       <div className="bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
           <ServicesOverview />
         </div>
       </div>

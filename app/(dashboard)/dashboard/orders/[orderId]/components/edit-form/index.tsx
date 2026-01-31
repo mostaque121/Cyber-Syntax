@@ -11,7 +11,7 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { Payment, ProductOrder, ServiceOrder } from "@/prisma/generated/prisma";
-import { EditSectionType } from "../../page";
+import { EditSectionType } from "../order-details-client";
 import AddPayment from "./add-payments";
 import AddProducts from "./add-products";
 import AddServices from "./add-services";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { Check, Phone } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -8,12 +8,14 @@ interface CheckoutSuccessProps {
   orderId: string;
   total: number;
   email: string;
+  isLoggedIn: boolean;
 }
 
 export function CheckoutSuccess({
   orderId,
   total,
   email,
+  isLoggedIn,
 }: CheckoutSuccessProps) {
   const [copied, setCopied] = useState(false);
 
@@ -59,17 +61,45 @@ export function CheckoutSuccess({
           to <span className="font-semibold">{email}</span>.
         </p>
 
-        <Link
-          href={`/orders/${orderId}`}
-          className="inline-block px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-semibold"
-        >
-          View Your Order
-        </Link>
-
-        <p className="text-sm text-gray-500 mt-4">
-          You can track your order status and download the invoice from the
-          order page.
-        </p>
+        {isLoggedIn ? (
+          <>
+            <Link
+              href={`/profile`}
+              className="inline-block px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 font-semibold"
+            >
+              View Your Order
+            </Link>
+            <p className="text-sm text-gray-500 mt-4">
+              You can track your order status and download the invoice from the
+              order page.
+            </p>
+          </>
+        ) : (
+          <>
+            <div className="bg-blue-50 border border-blue-100 p-4 rounded-md">
+              <p className="text-gray-700 mb-3">
+                To track your order, please call us at:
+              </p>
+              <a
+                href="tel:+8801XXXXXXXXX"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-teal-600 text-white rounded-md hover:bg-teal-700 font-semibold"
+              >
+                <Phone className="w-5 h-5" />
+                +880 1XXX-XXXXXX
+              </a>
+            </div>
+            <p className="text-sm text-gray-500 mt-4">
+              Create an account to easily track all your orders and enjoy faster
+              checkout.{" "}
+              <Link
+                href="/signup"
+                className="text-blue-600 hover:underline font-medium"
+              >
+                Sign up now
+              </Link>
+            </p>
+          </>
+        )}
       </div>
     </div>
   );

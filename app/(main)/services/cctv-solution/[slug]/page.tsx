@@ -1,8 +1,21 @@
-import { getCctvPackageBySlug } from "@/app/(main)/actions/cctv-package-actions";
+import {
+  getAllCctvPackages,
+  getCctvPackageBySlug,
+} from "@/app/(main)/actions/cctv-package-actions";
 import { notFound } from "next/navigation";
 import { CctvPackageBreadcrumb } from "./components/cctvpackage-bredcrumb";
 import { CctvPackageDetails } from "./components/cctvpackage-details";
 import { CctvPackageImages } from "./components/cctvpackage-images";
+
+// Generate static params for all CCTV packages
+export async function generateStaticParams() {
+  const packages = await getAllCctvPackages();
+
+  return packages.map((pkg) => ({
+    slug: pkg.slug,
+  }));
+}
+
 export default async function CctvPackagePage({
   params,
 }: {

@@ -437,7 +437,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\Next js\\next-hand\\prisma\\generated\\prisma",
+      "value": "D:\\Next js\\cyber-syntax\\prisma\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -451,7 +451,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\Next js\\next-hand\\prisma\\schema.prisma",
+    "sourceFilePath": "D:\\Next js\\cyber-syntax\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

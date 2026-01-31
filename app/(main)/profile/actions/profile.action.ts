@@ -105,10 +105,26 @@ export async function getUserOrders(params: { page?: number; limit?: number }) {
         skip,
         take: limit,
         orderBy: { createdAt: "desc" },
-        include: {
-          productOrders: true,
-          serviceOrders: true,
-          payments: true,
+        select: {
+          orderId: true,
+          status: true,
+          orderType: true,
+          createdAt: true,
+          productCost: true,
+          serviceCost: true,
+          shippingCost: true,
+          productTax: true,
+          serviceTax: true,
+          discount: true,
+          productOrders: {
+            select: { id: true },
+          },
+          serviceOrders: {
+            select: { id: true },
+          },
+          payments: {
+            select: { amount: true },
+          },
         },
       }),
       prisma.order.count({ where: { userId: session.user.id } }),
@@ -151,24 +167,55 @@ export async function getOrderDetails(orderId: string) {
         orderId,
         userId: session.user.id, // Ensure user can only see their own orders
       },
-      include: {
+      select: {
+        orderId: true,
+        status: true,
+        createdAt: true,
+        customerName: true,
+        phoneNumber: true,
+        fullAddress: true,
+        productCost: true,
+        serviceCost: true,
+        shippingCost: true,
+        productTax: true,
+        serviceTax: true,
+        discount: true,
         productOrders: {
-          include: {
+          select: {
+            id: true,
+            productName: true,
+            productImage: true,
+            quantity: true,
+            price: true,
+            warranty: true,
+            serialNumber: true,
             product: {
               select: {
-                id: true,
-                slug: true,
                 images: {
                   where: { isFeatured: true },
                   take: 1,
+                  select: { url: true },
                 },
               },
             },
           },
         },
-        serviceOrders: true,
+        serviceOrders: {
+          select: {
+            id: true,
+            name: true,
+            serviceType: true,
+            price: true,
+          },
+        },
         payments: {
           orderBy: { date: "desc" },
+          select: {
+            id: true,
+            amount: true,
+            method: true,
+            date: true,
+          },
         },
       },
     });

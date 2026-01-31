@@ -4,13 +4,18 @@ import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/prisma/generated/prisma";
 import slugify from "slugify";
 
-import { updateTag } from "next/cache";
+import { checkAccess } from "@/lib/check-access";
+import { revalidatePath, updateTag } from "next/cache";
 import {
   CCTVPackageFormData,
   cctvPackageSchema,
 } from "../validations/cctv-package.validation";
 
 export async function createCctvPackage(input: CCTVPackageFormData) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   const parsed = cctvPackageSchema.safeParse(input);
 
   if (!parsed.success) {
@@ -70,6 +75,10 @@ export async function createCctvPackage(input: CCTVPackageFormData) {
 }
 
 export async function updateCctvPackage(id: string, data: CCTVPackageFormData) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     const parsed = cctvPackageSchema.safeParse(data);
 
@@ -102,8 +111,8 @@ export async function updateCctvPackage(id: string, data: CCTVPackageFormData) {
         prisma.cCTVImage.update({
           where: { id: img.id! },
           data: { isFeatured: img.isFeatured },
-        })
-      )
+        }),
+      ),
     );
 
     // Add new images
@@ -133,6 +142,7 @@ export async function updateCctvPackage(id: string, data: CCTVPackageFormData) {
     });
 
     updateTag("all-cctv-packages");
+    revalidatePath(`/service/cctv-package/${slug}`);
     return { success: true };
   } catch (error) {
     console.error("Error updating package:", error);
@@ -144,12 +154,17 @@ export async function updateCctvPackage(id: string, data: CCTVPackageFormData) {
 }
 
 export async function deleteCctvpackage(id: string) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
-    await prisma.cCTVPackage.delete({
+    const deletedPackage = await prisma.cCTVPackage.delete({
       where: { id },
     });
 
     updateTag("all-cctv-packages");
+    revalidatePath(`/service/cctv-package/${deletedPackage.slug}`);
     return { success: true };
   } catch (error) {
     console.error("Error deleting package:", error);

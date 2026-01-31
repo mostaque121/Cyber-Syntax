@@ -20,7 +20,7 @@ export const getAllCctvPackages = unstable_cache(
   ["all-cctv-packages"], // Cache key
   {
     tags: ["all-cctv-packages"], // Cache tags for revalidation
-  }
+  },
 );
 
 export async function getCctvPackageBySlug({ slug }: { slug: string }) {

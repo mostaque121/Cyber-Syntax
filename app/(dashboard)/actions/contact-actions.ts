@@ -1,5 +1,6 @@
 "use server";
 
+import { checkAccess } from "@/lib/check-access";
 import { prisma } from "@/lib/prisma";
 import { ContactStatus, Prisma } from "@/prisma/generated/prisma";
 
@@ -62,6 +63,10 @@ export async function getContactSubmissionById(id: string) {
 }
 
 export async function updateContactStatus(id: string, status: ContactStatus) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     const submission = await prisma.contactSubmission.update({
       where: { id },
@@ -82,6 +87,10 @@ export async function updateContactStatus(id: string, status: ContactStatus) {
 }
 
 export async function deleteContactSubmission(id: string) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     await prisma.contactSubmission.delete({
       where: { id },

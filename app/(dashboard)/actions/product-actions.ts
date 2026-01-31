@@ -1,8 +1,9 @@
 "use server";
 import { prisma } from "@/lib/prisma";
 
+import { checkAccess } from "@/lib/check-access";
 import { Prisma } from "@/prisma/generated/prisma";
-import { updateTag } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import slugify from "slugify";
 import {
   ProductFormData,
@@ -10,6 +11,10 @@ import {
 } from "../validations/product.validation";
 
 export async function createProduct(input: ProductFormData) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   // Step 1 — Validate input
   const parsed = productSchema.safeParse(input);
 
@@ -71,6 +76,7 @@ export async function createProduct(input: ProductFormData) {
       },
     });
     updateTag("featured-products");
+    updateTag("all-products");
     return {
       success: true,
       data: product,
@@ -86,6 +92,10 @@ export async function createProduct(input: ProductFormData) {
 }
 
 export async function updateProduct(id: string, data: ProductFormData) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     // Step 1 — Validate input
     const parsed = productSchema.safeParse(data);
@@ -119,8 +129,8 @@ export async function updateProduct(id: string, data: ProductFormData) {
         prisma.productImage.update({
           where: { id: img.id! },
           data: { isFeatured: img.isFeatured },
-        })
-      )
+        }),
+      ),
     );
 
     // Add new images
@@ -161,6 +171,9 @@ export async function updateProduct(id: string, data: ProductFormData) {
     });
 
     updateTag("featured-products");
+    updateTag("all-products");
+    revalidatePath(`/product/${slug}`);
+
     return { success: true };
   } catch (error) {
     console.error("Error updating product:", error);
@@ -172,11 +185,17 @@ export async function updateProduct(id: string, data: ProductFormData) {
 }
 
 export async function deleteProduct(id: string) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
-    await prisma.product.delete({
+    const deletedProduct = await prisma.product.delete({
       where: { id },
     });
     updateTag("featured-products");
+    updateTag("all-products");
+    revalidatePath(`/product/${deletedProduct.slug}`);
     return { success: true };
   } catch (error) {
     console.error("Error deleting product:", error);

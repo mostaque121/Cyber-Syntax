@@ -43,21 +43,34 @@ export function FaqSection() {
 
   return (
     <section className="mb-16">
-      <div className="text-center mb-10">
-        <h2 className="text-3xl font-bold text-gray-900 mb-3">
+      <div className="flex border-b pb-4 mb-4 border-[#dee2e6] gap-4 flex-wrap justify-between items-center">
+        <h2 className="text-[18px] uppercase  px-1  md:text-[32px]  font-bold text-black">
           Frequently Asked Questions
         </h2>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          Got questions? We&apos;ve got answers
-        </p>
       </div>
 
-      <div className="max-w-3xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <Accordion type="single" collapsible className="space-y-3">
-          {faqs.map((faq, index) => (
+          {faqs.slice(0, Math.ceil(faqs.length / 2)).map((faq, index) => (
             <AccordionItem
               key={index}
               value={`item-${index}`}
+              className="bg-white border border-gray-200 rounded-[5px] px-6"
+            >
+              <AccordionTrigger className="text-left font-semibold text-gray-900 hover:text-primary">
+                {faq.question}
+              </AccordionTrigger>
+              <AccordionContent className="text-gray-600">
+                {faq.answer}
+              </AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+        <Accordion type="single" collapsible className="space-y-3">
+          {faqs.slice(Math.ceil(faqs.length / 2)).map((faq, index) => (
+            <AccordionItem
+              key={index}
+              value={`item-${index + Math.ceil(faqs.length / 2)}`}
               className="bg-white border border-gray-200 rounded-[5px] px-6"
             >
               <AccordionTrigger className="text-left font-semibold text-gray-900 hover:text-primary">

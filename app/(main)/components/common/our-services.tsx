@@ -32,7 +32,7 @@ export function OurServices() {
   return (
     <div>
       <div className="container px-4 md:px-8 py-8">
-        <h2 className="text-[18px] pb-4 px-1 mb-4 md:text-[32px] border-b border-[#dee2e6] font-bold text-black">
+        <h2 className="text-[18px] uppercase pb-4 px-1 mb-4 md:text-[32px] border-b border-[#dee2e6] font-bold text-black">
           Our Services
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

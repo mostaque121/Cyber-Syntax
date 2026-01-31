@@ -2,16 +2,17 @@
 
 import PaginationControl from "@/components/custom-ui/pagination-control";
 import { useMemo, useState } from "react";
-import ProductCard from "../../components/card/product-card";
+import ProductCard, {
+  ProductCardType,
+} from "../../components/card/product-card";
 import { ProductNotFound } from "./not-found";
 import ProductCategorySection from "./product-category";
 import { ProductSorting } from "./sorting";
 // Ensure you have this type or use 'any' if strictly needed,
 // but sticking to your Prisma type is best:
-import { ProductItem } from "../../types/product.types";
 
 interface ProductListProps {
-  initialProducts: ProductItem[];
+  initialProducts: ProductCardType[];
   categoryName?: string; // Passed from the server page
 }
 
@@ -69,7 +70,7 @@ export function ProductList({
   }
 
   return (
-    <div className="container mx-auto md:px-8 py-6 px-4">
+    <div>
       {/* HEADER */}
       <div className="flex items-center w-full justify-between gap-6">
         <h1 className="text-2xl font-semibold capitalize">

@@ -1,5 +1,6 @@
 "use server";
 
+import { checkAccess } from "@/lib/check-access";
 import { prisma } from "@/lib/prisma";
 import { PaymentFormData } from "../validations/order.validation";
 
@@ -9,6 +10,10 @@ interface AddPaymentParams {
 }
 
 export async function addPaymentToOrder({ orderId, data }: AddPaymentParams) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     await prisma.payment.create({
       data: {
@@ -35,6 +40,10 @@ export async function editPaymentOnOrder({
   paymentId,
   data,
 }: EditPaymentParams) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     await prisma.payment.update({
       where: { id: paymentId },
@@ -52,6 +61,10 @@ export async function editPaymentOnOrder({
   }
 }
 export async function deletePayment({ paymentId }: { paymentId: string }) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     await prisma.payment.delete({
       where: { id: paymentId },

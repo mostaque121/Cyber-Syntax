@@ -4,30 +4,38 @@ import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import Link from "next/link";
 
 export function HomeContactSection() {
+  const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER || "+880 1898-887711";
+  const whatsapp =
+    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "+880 1898-887711";
+  const email = process.env.NEXT_PUBLIC_EMAIL || "support@nexthand.com.bd";
+  const address =
+    process.env.NEXT_PUBLIC_ADDRESS ||
+    "143/2, South Kazipara, Mirpur-12, Dhaka-1216";
+
   const contactMethods = [
     {
       icon: Phone,
       title: "Call Us",
-      value: "+1 (555) 123-4567",
-      href: "tel:+15551234567",
+      value: phone,
+      href: `tel:${phone.replace(/\s/g, "")}`,
     },
     {
       icon: Mail,
       title: "Email Us",
-      value: "support@cybersyntax.com",
-      href: "mailto:support@cybersyntax.com",
+      value: email,
+      href: `mailto:${email.trim()}`,
     },
     {
       icon: MapPin,
       title: "Visit Us",
-      value: "123 Tech Street, San Francisco, CA",
-      href: "https://maps.google.com",
+      value: address,
+      href: `https://maps.google.com/maps?q=${encodeURIComponent(address)}`,
     },
     {
       icon: MessageCircle,
       title: "WhatsApp",
-      value: "+1 (555) 987-6543",
-      href: "https://wa.me/15559876543",
+      value: whatsapp,
+      href: `https://wa.me/${whatsapp.replace(/[\s-]/g, "")}`,
     },
   ];
 
@@ -57,7 +65,7 @@ export function HomeContactSection() {
                     : undefined
                 }
               >
-                <Card className="bg-white border border-primary p-4 rounded-[5px] hover:shadow-lg transition-all h-full text-center">
+                <Card className="bg-white border border-primary p-4 gap-0 rounded-[5px] hover:shadow-lg transition-all h-full text-center">
                   <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-2">
                     <Icon className="w-5 h-5 text-primary" />
                   </div>

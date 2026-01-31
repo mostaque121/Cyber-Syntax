@@ -2,7 +2,7 @@
 
 import { OrderWithMappedDocuments } from "@/app/(dashboard)/types/order.types";
 import { DocumentType } from "@/prisma/generated/prisma";
-import { EditSectionType } from "../../page";
+import { EditSectionType } from "../order-details-client";
 import { CostManagement } from "./cost-management";
 import { CustomerInfo } from "./customer-info";
 import { OrderActions } from "./order-actions";

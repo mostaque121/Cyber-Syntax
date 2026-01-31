@@ -14,7 +14,7 @@ export default function SearchBox({ onSearchClick }: Props) {
         className="hidden md:flex w-96 items-center rounded-sm border border-transparent bg-white p-0.5 transition-all group hover:border-green-600"
       >
         <div className="w-full h-8 px-2 bg-transparent text-black placeholder-gray-500 flex items-center">
-          <span className="text-gray-500">Search for Products</span>
+          <span className="text-gray-500">Search</span>
         </div>
         <Button
           size="sm"

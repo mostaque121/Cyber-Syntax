@@ -1,4 +1,5 @@
 "use server";
+import { checkAccess } from "@/lib/check-access";
 import { prisma } from "@/lib/prisma";
 import { updateTag } from "next/cache";
 import slugify from "slugify";
@@ -18,7 +19,7 @@ export interface UpdateCategoryData {
 // Helper: generate full path recursively
 async function generateFullPath(
   name: string,
-  parentId?: string | null
+  parentId?: string | null,
 ): Promise<string> {
   const slug = slugify(name, { lower: true });
   if (!parentId) return slug;
@@ -38,6 +39,10 @@ async function calculateLevel(parentId?: string | null): Promise<number> {
 
 // Create a new category
 export async function createCategory(data: CreateCategoryData) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     const slug = data.slug ?? slugify(data.name, { lower: true });
     const fullPath = await generateFullPath(data.name, data.parentId);
@@ -64,6 +69,10 @@ export async function createCategory(data: CreateCategoryData) {
 
 // Update a category
 export async function updateCategory(data: UpdateCategoryData) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     const slug = data.slug ?? slugify(data.name, { lower: true });
 
@@ -91,7 +100,7 @@ export async function updateCategory(data: UpdateCategoryData) {
     await updateChildrenPaths(
       updatedCategory.id,
       updatedCategory.fullPath,
-      updatedCategory.level
+      updatedCategory.level,
     );
 
     updateTag("categories");
@@ -106,8 +115,12 @@ export async function updateCategory(data: UpdateCategoryData) {
 async function updateChildrenPaths(
   parentId: string,
   parentFullPath: string,
-  parentLevel: number
+  parentLevel: number,
 ) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   const children = await prisma.category.findMany({ where: { parentId } });
   for (const child of children) {
     const newFullPath = `${parentFullPath}/${child.slug}`;
@@ -122,6 +135,10 @@ async function updateChildrenPaths(
 
 // Delete a category (recursive)
 export async function deleteCategory(id: string) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     // Recursively delete children
     await deleteCategoryRecursive(id);
@@ -135,6 +152,10 @@ export async function deleteCategory(id: string) {
 }
 
 async function deleteCategoryRecursive(categoryId: string) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   const children = await prisma.category.findMany({
     where: { parentId: categoryId },
   });
@@ -163,8 +184,12 @@ export async function getCategoryById(id: string) {
 // Move a category to a different parent
 export async function moveCategoryToParent(
   categoryId: string,
-  newParentId: string | null
+  newParentId: string | null,
 ) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     const fullPath = await generateFullPath(categoryId, newParentId);
     const level = await calculateLevel(newParentId);

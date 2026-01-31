@@ -2,10 +2,23 @@ import { Badge } from "@/components/ui/badge";
 import { formatPrice } from "@/lib/format-price";
 import Image from "next/image";
 import Link from "next/link";
-import { ProductItem } from "../../types/product.types";
 
+export interface ProductCardType {
+  images: {
+    id: string;
+    isFeatured: boolean;
+    url: string;
+  }[];
+  id: string;
+  title: string;
+  slug: string;
+  price: number;
+  discountPercentage: number;
+  isHotDeal: boolean;
+  isFeatured: boolean;
+}
 interface SectionProps {
-  product: ProductItem;
+  product: ProductCardType;
 }
 
 export default function ProductCard({ product }: SectionProps) {

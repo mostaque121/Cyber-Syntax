@@ -104,8 +104,30 @@ export const getFeaturedProducts = unstable_cache(
         isAvailable: true,
         isFeatured: true,
       },
-      include: {
-        images: true,
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        price: true,
+        discountPercentage: true,
+        isFeatured: true,
+        isHotDeal: true,
+        images: {
+          select: {
+            id: true,
+            url: true,
+            isFeatured: true,
+          },
+        },
+        category: {
+          select: {
+            id: true,
+            name: true,
+            level: true,
+            fullPath: true,
+            slug: true,
+          },
+        },
       },
       take: 4,
     });
@@ -113,7 +135,7 @@ export const getFeaturedProducts = unstable_cache(
   ["featured-products"], // Cache key
   {
     tags: ["featured-products"], // Cache tags for revalidation
-  }
+  },
 );
 
 export const getAllProducts = unstable_cache(
@@ -122,10 +144,32 @@ export const getAllProducts = unstable_cache(
       where: {
         isAvailable: true,
       },
-      include: {
-        images: true,
-        category: true,
+      select: {
+        id: true,
+        title: true,
+        slug: true,
+        price: true,
+        discountPercentage: true,
+        isFeatured: true,
+        isHotDeal: true,
+        images: {
+          select: {
+            id: true,
+            url: true,
+            isFeatured: true,
+          },
+        },
+        category: {
+          select: {
+            id: true,
+            name: true,
+            level: true,
+            fullPath: true,
+            slug: true,
+          },
+        },
       },
+
       orderBy: {
         createdAt: "desc",
       },
@@ -134,5 +178,5 @@ export const getAllProducts = unstable_cache(
   ["all-products"], // Cache key
   {
     tags: ["all-products"], // Cache tags for revalidation
-  }
+  },
 );

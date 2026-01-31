@@ -55,6 +55,7 @@ export default function MultiStepSignup() {
         name: formData.name,
         email: formData.email,
         password: formData.password,
+        role: "CUSTOMER",
       });
 
       if (error?.message) {
@@ -64,7 +65,7 @@ export default function MultiStepSignup() {
       if (data?.user.email) {
         setUserEmail(data.user.email);
         setSuccess(
-          "Please check your email for the OTP code to complete registration."
+          "Please check your email for the OTP code to complete registration.",
         );
         setCurrentStep("otp");
       }
@@ -88,7 +89,7 @@ export default function MultiStepSignup() {
 
       if (data?.success) {
         setSuccess(
-          "Please check your email for the OTP code to complete registration."
+          "Please check your email for the OTP code to complete registration.",
         );
       }
 

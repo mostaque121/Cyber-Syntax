@@ -1,7 +1,8 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
-import { emailOTP } from "better-auth/plugins";
+import { admin, emailOTP } from "better-auth/plugins";
+import { ac, adminRole, customerRole, moderatorRole } from "./access-control";
 import { prisma } from "./prisma";
 
 export const auth = betterAuth({
@@ -58,6 +59,15 @@ export const auth = betterAuth({
         }
       },
     }),
+    admin({
+      ac,
+      roles: {
+        ADMIN: adminRole,
+        MODERATOR: moderatorRole,
+        CUSTOMER: customerRole,
+      },
+    }),
+
     nextCookies(),
   ],
   socialProviders: {
@@ -65,6 +75,11 @@ export const auth = betterAuth({
       prompt: "select_account",
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      mapProfileToUser: () => {
+        return {
+          role: "CUSTOMER",
+        };
+      },
     },
   },
 });

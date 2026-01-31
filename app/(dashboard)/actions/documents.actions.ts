@@ -1,6 +1,7 @@
 "use server";
 
 import { auth } from "@/lib/auth";
+import { checkAccess } from "@/lib/check-access";
 import { prisma } from "@/lib/prisma";
 import { DocumentType } from "@/prisma/generated/prisma";
 import { headers } from "next/headers";
@@ -17,6 +18,10 @@ export async function createDocuments({
   doc: InvoiceFormData | QuotationFormData | ReceiptFormData;
   docType: DocumentType;
 }) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     const session = await auth.api.getSession({
       headers: await headers(),
@@ -49,6 +54,10 @@ export async function updateDocument({
   doc: InvoiceFormData | QuotationFormData | ReceiptFormData;
   docType: DocumentType;
 }) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     await prisma.orderDocument.update({
       where: {
@@ -67,6 +76,10 @@ export async function updateDocument({
   }
 }
 export async function deleteDocument({ docId }: { docId: string }) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     await prisma.orderDocument.delete({
       where: {

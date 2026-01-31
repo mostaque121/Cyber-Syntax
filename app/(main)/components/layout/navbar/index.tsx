@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { ProductCardType } from "../../card/product-card";
 import NavFooter from "./navbar-footer";
 import { NavbarHeader } from "./navbar-header";
 import SearchModal from "./search-modal";
 
-export default function NextHandNavbar() {
+export default function Navbar({ products }: { products?: ProductCardType[] }) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
@@ -15,7 +16,11 @@ export default function NextHandNavbar() {
         <NavFooter />
       </div>
 
-      <SearchModal open={isSearchOpen} onOpenChange={setIsSearchOpen} />
+      <SearchModal
+        products={products}
+        open={isSearchOpen}
+        onOpenChange={setIsSearchOpen}
+      />
     </>
   );
 }

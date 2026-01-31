@@ -309,11 +309,6 @@ export function OrderDetail({ orderId, onBack }: OrderDetailProps) {
                       {paymentMethodLabels[payment.method]} •{" "}
                       {format(new Date(payment.date), "MMM dd, yyyy")}
                     </p>
-                    {payment.note && (
-                      <p className="text-xs text-gray-500 mt-1">
-                        {payment.note}
-                      </p>
-                    )}
                   </div>
                   <Badge className="bg-green-100 text-green-800 border-green-300">
                     Paid

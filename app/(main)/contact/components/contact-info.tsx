@@ -3,35 +3,45 @@ import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { JSX } from "react";
 
 export function ContactInfo() {
+  const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER || "+880 1898-887711";
+  const whatsapp =
+    process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "+880 1898-887711";
+  const email = process.env.NEXT_PUBLIC_EMAIL || "support@nexthand.com.bd";
+  const address =
+    process.env.NEXT_PUBLIC_ADDRESS ||
+    "143/2, South Kazipara, Mirpur-12, Dhaka-1216";
+  const availability =
+    process.env.NEXT_PUBLIC_AVAILABILITY || "Sun - Thurs: 9:00 AM - 6:00 PM";
+
   const contactDetails = [
     {
       icon: Phone,
       title: "Phone",
-      value: "+1 (555) 123-4567",
-      href: "tel:+15551234567",
+      value: phone,
+      href: `tel:${phone.replace(/\s/g, "")}`,
     },
     {
       icon: Mail,
       title: "Email",
-      value: "support@nexthand.com",
-      href: "mailto:support@nexthand.com",
+      value: email,
+      href: `mailto:${email.trim()}`,
     },
     {
       icon: MapPin,
       title: "Address",
-      value: "123 Tech Street, San Francisco, CA 94102",
-      href: "https://maps.google.com",
+      value: address,
+      href: `https://maps.google.com/maps?q=${encodeURIComponent(address)}`,
     },
     {
       icon: MessageCircle,
       title: "WhatsApp",
-      value: "+1 (555) 987-6543",
-      href: "https://wa.me/15559876543",
+      value: whatsapp,
+      href: `https://wa.me/${whatsapp.replace(/[\s-]/g, "")}`,
     },
     {
       icon: Clock,
       title: "Business Hours",
-      value: "Mon - Fri: 9:00 AM - 6:00 PM",
+      value: availability,
       noLink: true,
     },
   ];

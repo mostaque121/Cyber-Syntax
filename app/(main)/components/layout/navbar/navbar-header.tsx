@@ -44,14 +44,11 @@ export function NavbarHeader({ setIsSearchOpen }: NavbarHeaderProps) {
             <Search className="h-4 w-4 text-white" />
           </Button>
         </div>
-        <Link
-          href="/get-service"
-          className="bg-green-600 hover:bg-green-700 rounded-md hidden md:block text-white px-3 lg:px-4 py-2 text-sm"
-        >
-          Get Service
-        </Link>
+
         <ProfileSection />
-        <CartButton />
+        <div className="hidden md:flex">
+          <CartButton />
+        </div>
       </div>
     </div>
   );

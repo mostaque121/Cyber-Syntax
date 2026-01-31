@@ -1,4 +1,5 @@
 "use server";
+import { checkAccess } from "@/lib/check-access";
 import { prisma } from "@/lib/prisma";
 import { OrderStatus, Prisma } from "@/prisma/generated/prisma";
 import {
@@ -104,8 +105,12 @@ export async function fetchOrderById(orderId: string) {
 }
 export async function updateOrderCustomerInfo(
   orderId: string,
-  customer: CustomerInfoFormData
+  customer: CustomerInfoFormData,
 ) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     const parsed = customerInfoSchema.safeParse(customer);
 
@@ -127,8 +132,12 @@ export async function updateOrderCustomerInfo(
 }
 export async function updateOrderSummary(
   orderId: string,
-  orderSummary: OrderSummaryFormData
+  orderSummary: OrderSummaryFormData,
 ) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     const parsed = orderSummarySchema.safeParse(orderSummary);
     if (!parsed.success) {
@@ -155,8 +164,12 @@ export async function updateOrderSummary(
 }
 export async function editOrderCost(
   orderId: string,
-  orderCost: OrderCostFormData
+  orderCost: OrderCostFormData,
 ) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     const parsed = orderCostSchema.safeParse(orderCost);
 
@@ -178,6 +191,10 @@ export async function editOrderCost(
   }
 }
 export async function updateOrderStatus(orderId: string, status: OrderStatus) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   await prisma.order.update({
     where: { orderId },
     data: { status },
@@ -186,6 +203,10 @@ export async function updateOrderStatus(orderId: string, status: OrderStatus) {
   return { success: true };
 }
 export async function deleteOrder({ orderId }: { orderId: string }) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     await prisma.order.delete({
       where: { orderId },
@@ -209,6 +230,10 @@ export async function addProductsToOrder({
   orderId: string;
   items: OrderProductListFormData;
 }) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     // Prepare new items
     const productData = items.products.map((p) => ({
@@ -239,6 +264,10 @@ export async function editProductOnOrder({
   productOrderId: string;
   item: OrderProductFormData;
 }) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     await prisma.productOrder.update({
       where: { id: productOrderId },
@@ -255,6 +284,10 @@ export async function deleteProductFromOrder({
 }: {
   productOrderId: string;
 }) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     await prisma.productOrder.delete({
       where: { id: productOrderId },
@@ -278,6 +311,10 @@ export async function addServicesToOrder({
   orderId: string;
   items: OrderServiceListFormData;
 }) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     // Prepare new items
     const serviceData = items.services.map((p) => ({
@@ -305,6 +342,10 @@ export async function editServiceOnOrder({
   serviceOrderId: string;
   item: OrderServiceFormData;
 }) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     await prisma.serviceOrder.update({
       where: { id: serviceOrderId },
@@ -321,6 +362,10 @@ export async function deleteServiceFromOrder({
 }: {
   serviceOrderId: string;
 }) {
+  const access = await checkAccess(["ADMIN", "MODERATOR"]);
+  if (!access.ok) {
+    return { error: access.error };
+  }
   try {
     await prisma.serviceOrder.delete({
       where: { id: serviceOrderId },

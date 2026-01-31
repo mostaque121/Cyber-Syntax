@@ -10,16 +10,10 @@ import {
 export default function WhyChooseSection() {
   return (
     <section className="container py-16 md:px-10 mx-auto px-4 bg-slate-50">
-      <div className="text-center mb-12">
-        <h2 className="text-4xl font-bold mb-4">
-          Why Choose <span className="text-teal-500">Nexthand</span> for Your
-          Used Devices?
+      <div className="flex border-b pb-4 mb-4 border-[#dee2e6] gap-4 flex-wrap justify-between items-center">
+        <h2 className="text-[18px] uppercase  px-1  md:text-[32px]  font-bold text-black">
+          Why Choose cyber syntax
         </h2>
-        <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-          Nexthand is your trusted source in Bangladesh for reliable,
-          affordable, and quality-tested used phones, laptops, and MacBooks that
-          feel like new.
-        </p>
       </div>
 
       <div className="flex  flex-col items-stretch  gap-3 lg:flex-row">
