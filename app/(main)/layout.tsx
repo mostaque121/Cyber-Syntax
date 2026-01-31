@@ -17,7 +17,10 @@ export default async function RootLayout({
         <CartDrawer />
       </Suspense>
 
-      <Navbar products={AllProducts ?? []} />
+      <Suspense>
+        <Navbar products={AllProducts ?? []} />
+      </Suspense>
+
       {children}
       <Footer />
     </CartProvider>
