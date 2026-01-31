@@ -55,7 +55,6 @@ export default function MultiStepSignup() {
         name: formData.name,
         email: formData.email,
         password: formData.password,
-        role: "CUSTOMER",
       });
 
       if (error?.message) {
