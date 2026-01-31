@@ -164,7 +164,7 @@ export default function MultiStepSignup() {
         return;
       }
     } catch {
-      setError("An error occurred with Google sign in");
+      setError("An error occurred with Google signin");
       setsetIsGoogleIsLoading(false);
     }
   };
