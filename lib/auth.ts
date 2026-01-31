@@ -66,6 +66,7 @@ export const auth = betterAuth({
         MODERATOR: moderatorRole,
         CUSTOMER: customerRole,
       },
+      defaultRole: "CUSTOMER",
     }),
 
     nextCookies(),
