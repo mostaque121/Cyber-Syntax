@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { checkAccess } from "@/lib/check-access";
 import { redirect } from "next/navigation";
 import { OrderClient } from "./components/order-client";

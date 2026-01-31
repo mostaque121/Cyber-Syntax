@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { getAllCategories } from "@/app/actions/category-actions";
 import { checkAccess } from "@/lib/check-access";
 import { redirect } from "next/navigation";
