@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { z } from "zod";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -31,7 +31,29 @@ type Step = "signup" | "otp" | "profile" | "complete";
 type SignupFormData = z.infer<typeof signupSchema>;
 type OtpFormData = z.infer<typeof otpSchema>;
 
-export default function MultiStepSignup() {
+function SignupLoading() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <Card>
+          <CardContent className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+export default function MultiStepSignupPage() {
+  return (
+    <Suspense fallback={<SignupLoading />}>
+      <MultiStepSignup />
+    </Suspense>
+  );
+}
+
+function MultiStepSignup() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [currentStep, setCurrentStep] = useState<Step>("signup");
