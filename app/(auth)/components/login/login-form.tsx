@@ -54,6 +54,17 @@ export function LoginForm() {
       });
 
       if (error) {
+        // Check if error is due to unverified email
+        if (
+          error.code === "EMAIL_NOT_VERIFIED" ||
+          error.message?.toLowerCase().includes("email is not verified")
+        ) {
+          // Redirect to signup page to handle OTP and profile completion
+          router.push(
+            `/signup?email=${encodeURIComponent(values.email)}&step=otp`,
+          );
+          return;
+        }
         setError(error.message ?? "An Unknown error. Please try again.");
         return;
       }

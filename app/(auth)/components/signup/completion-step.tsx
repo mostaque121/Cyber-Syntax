@@ -17,11 +17,8 @@ export function CompletionStep() {
           Welcome to our platform. You can now start using all the features.
         </p>
       </div>
-      <Button
-        className="w-full"
-        onClick={() => (window.location.href = "/dashboard")}
-      >
-        Go to Dashboard
+      <Button className="w-full" onClick={() => (window.location.href = "/")}>
+        Go to Home
       </Button>
     </div>
   );

@@ -7,6 +7,12 @@ import { prisma } from "./prisma";
 import { sendOTPEmail } from "./send-otp-email";
 
 export const auth = betterAuth({
+  trustedOrigins: async () => {
+    if (process.env.NODE_ENV === "development") {
+      return ["http://localhost:3000", "http://192.168.0.197:3000"];
+    }
+    return ["https://cybersyntax.vercel.app"];
+  },
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),

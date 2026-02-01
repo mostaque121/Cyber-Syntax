@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { z } from "zod";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -31,6 +32,8 @@ type SignupFormData = z.infer<typeof signupSchema>;
 type OtpFormData = z.infer<typeof otpSchema>;
 
 export default function MultiStepSignup() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [currentStep, setCurrentStep] = useState<Step>("signup");
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
@@ -38,6 +41,76 @@ export default function MultiStepSignup() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isGoogleLoading, setsetIsGoogleIsLoading] = useState<boolean>(false);
   const [isResending, setIsResending] = useState<boolean>(false);
+  const [isCheckingAuth, setIsCheckingAuth] = useState<boolean>(true);
+
+  /** Check user authentication state and URL params on mount */
+  useEffect(() => {
+    const checkAuthState = async () => {
+      try {
+        // Check if coming from login with unverified email
+        const emailParam = searchParams.get("email");
+        const stepParam = searchParams.get("step");
+
+        if (emailParam && stepParam === "otp") {
+          // Coming from login page with unverified email
+          // Send verification OTP
+          await authClient.emailOtp.sendVerificationOtp({
+            email: emailParam,
+            type: "email-verification",
+          });
+          setUserEmail(emailParam);
+          setSuccess("Please verify your email to continue.");
+          setCurrentStep("otp");
+          setIsCheckingAuth(false);
+          // Clear URL params
+          router.replace("/signup");
+          return;
+        }
+
+        const { data: session } = await authClient.getSession();
+
+        if (!session?.user) {
+          // No logged in user, show signup form
+          setIsCheckingAuth(false);
+          return;
+        }
+
+        const user = session.user;
+        setUserEmail(user.email);
+
+        // Check if email is verified
+        if (!user.emailVerified) {
+          // Send OTP and show OTP step
+          await authClient.emailOtp.sendVerificationOtp({
+            email: user.email,
+            type: "email-verification",
+          });
+          setSuccess("Please verify your email to continue.");
+          setCurrentStep("otp");
+          setIsCheckingAuth(false);
+          return;
+        }
+
+        // Check if profile is complete (has phoneNumber or companyName)
+        const isProfileComplete = user.phoneNumber || user.companyName;
+
+        if (!isProfileComplete) {
+          // Show profile completion step
+          setCurrentStep("profile");
+          setIsCheckingAuth(false);
+          return;
+        }
+
+        // All done, redirect to home
+        router.replace("/");
+      } catch {
+        // Error checking auth, show signup form
+        setIsCheckingAuth(false);
+      }
+    };
+
+    checkAuthState();
+  }, [router, searchParams]);
 
   /** Clear messages */
   const clearMessages = () => {
@@ -57,8 +130,34 @@ export default function MultiStepSignup() {
         password: formData.password,
       });
 
+      // If user already exists, send verification OTP directly
+      if (error?.code === "USER_ALREADY_EXISTS") {
+        // Send OTP to the existing email (works even without login)
+        const otpResult = await authClient.emailOtp.sendVerificationOtp({
+          email: formData.email,
+          type: "email-verification",
+        });
+
+        if (otpResult.error) {
+          // If OTP fails (e.g., user is already verified), show login message
+          setError(
+            "Account already exists. Please login or use forgot password.",
+          );
+          return;
+        }
+
+        // OTP sent successfully, show OTP step
+        setUserEmail(formData.email);
+        setSuccess(
+          "Account exists but not verified. We've sent a new OTP to your email.",
+        );
+        setCurrentStep("otp");
+        return;
+      }
+
       if (error?.message) {
         setError(error.message);
+        return;
       }
 
       if (data?.user.email) {
@@ -207,6 +306,21 @@ export default function MultiStepSignup() {
         return "Your account has been created successfully";
     }
   };
+
+  // Show loading state while checking auth
+  if (isCheckingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8">
+          <Card>
+            <CardContent className="flex items-center justify-center py-12">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
