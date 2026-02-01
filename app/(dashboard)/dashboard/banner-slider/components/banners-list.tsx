@@ -61,14 +61,35 @@ export default function BannersList({
             <Edit className="w-5 h-5 text-gray-700" />
           </Button>
 
-          {/* Banner Image */}
-          <Image
-            src={banner.image}
-            alt={`Banner ${banner.id}`}
-            width={1280}
-            height={320}
-            className="w-full h-auto object-cover"
-          />
+          {/* Banner Images */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 p-2">
+            <div>
+              <p className="text-xs font-medium text-gray-600 mb-1">
+                Large Image
+              </p>
+              <Image
+                src={banner.image}
+                alt={`Banner ${banner.id}`}
+                width={640}
+                height={160}
+                className="w-full h-auto object-cover rounded"
+              />
+            </div>
+            {banner.imageSmall && (
+              <div>
+                <p className="text-xs font-medium text-gray-600 mb-1">
+                  Small Image
+                </p>
+                <Image
+                  src={banner.imageSmall}
+                  alt={`Banner ${banner.id} - Small`}
+                  width={640}
+                  height={160}
+                  className="w-full h-auto object-cover rounded"
+                />
+              </div>
+            )}
+          </div>
 
           {/* Optional footer: link and status */}
           <div className="p-4 flex justify-between items-center bg-gray-50">

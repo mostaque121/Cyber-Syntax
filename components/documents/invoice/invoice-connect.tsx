@@ -18,12 +18,12 @@ export default function InvoiceConnect({ invoice, orderId }: SectionProps) {
   // Calculate subtotals
   const productSubTotal = invoice.orderProducts?.reduce(
     (sum, item) => sum + safeNumber(item.price) * safeNumber(item.quantity),
-    0
+    0,
   );
 
   const serviceSubTotal = invoice.orderServices?.reduce(
     (sum, item) => sum + safeNumber(item.price),
-    0
+    0,
   );
 
   const subTotal = productSubTotal + serviceSubTotal;

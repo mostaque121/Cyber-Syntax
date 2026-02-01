@@ -4,6 +4,7 @@ import { nextCookies } from "better-auth/next-js";
 import { admin, emailOTP } from "better-auth/plugins";
 import { ac, adminRole, customerRole, moderatorRole } from "./access-control";
 import { prisma } from "./prisma";
+import { sendOTPEmail } from "./send-otp-email";
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -52,11 +53,7 @@ export const auth = betterAuth({
     emailOTP({
       overrideDefaultEmailVerification: true,
       async sendVerificationOTP({ email, otp, type }) {
-        if (type === "email-verification") {
-          console.log(email, type, otp);
-        } else if (type === "forget-password") {
-          console.log(email, type, otp);
-        }
+        await sendOTPEmail(email, otp, type);
       },
     }),
     admin({

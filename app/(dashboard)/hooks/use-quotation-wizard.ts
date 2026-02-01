@@ -40,7 +40,7 @@ export function useQuotationWizard({
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
   const [sendEmail, setSendEmail] = useState(false);
   const [completedTabs, setCompletedTabs] = useState<boolean[]>(
-    Array(quotationTabs.length).fill(false)
+    Array(quotationTabs.length).fill(false),
   );
 
   const currentTab = quotationTabs[currentTabIndex];
@@ -95,7 +95,7 @@ export function useQuotationWizard({
     if (!currentTab.schema) return true;
 
     const fields = Object.keys(
-      currentTab.schema.shape
+      currentTab.schema.shape,
     ) as (keyof QuotationFormData)[];
     const isValid = await form.trigger(fields);
 
@@ -140,6 +140,16 @@ export function useQuotationWizard({
   };
 
   // -----------------------------
+  // Reset Wizard State
+  // -----------------------------
+  const resetWizard = () => {
+    setCurrentTabIndex(0);
+    setCompletedTabs(Array(quotationTabs.length).fill(false));
+    setSendEmail(false);
+    form.reset();
+  };
+
+  // -----------------------------
   // Mutations
   // -----------------------------
   const mutation = useMutation({
@@ -172,10 +182,11 @@ export function useQuotationWizard({
     },
 
     onSuccess: () => {
-      toast.success("Invoice saved successfully");
+      toast.success("Quotation saved successfully");
+      resetWizard();
       onSuccess?.();
     },
-    onError: () => toast.error("Failed to save invoice"),
+    onError: () => toast.error("Failed to save quotation"),
   });
 
   // -----------------------------
@@ -191,6 +202,7 @@ export function useQuotationWizard({
     handleNext,
     handlePrevious,
     jumpToStep,
+    resetWizard,
 
     mutation,
 

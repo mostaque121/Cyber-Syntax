@@ -35,7 +35,7 @@ import { NumberInput } from "@/components/custom-ui/number-input";
 import { Checkbox } from "@/components/ui/checkbox";
 const QuillEditor = dynamic(
   () => import("@/components/custom-ui/rich-text-editor"),
-  { ssr: false }
+  { ssr: false },
 );
 
 interface CctvPackageFormProps {
@@ -72,9 +72,8 @@ export function CctvPackageForm({
 
     if (result.success) {
       toast.success(
-        `Package ${isEditMode ? "updated" : "created"} successfully.`
+        `Package ${isEditMode ? "updated" : "created"} successfully.`,
       );
-      onCloseForm?.();
       onSuccess?.();
     } else {
       toast.error("Something went wrong!");
@@ -83,15 +82,7 @@ export function CctvPackageForm({
 
   return (
     <Form {...form}>
-      <div>
-        <h3 className="text-2xl px-8 font-semibold text-center mt-4">
-          {isEditMode ? "Update" : "Add"} CCTV Package
-        </h3>
-      </div>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 md:px-8 px-4 py-8"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 ">
         {/* Title */}
         <FormField
           control={form.control}

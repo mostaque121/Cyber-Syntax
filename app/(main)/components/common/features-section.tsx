@@ -43,7 +43,7 @@ export default function FeaturesSection() {
 
   return (
     <section className="container w-full py-16 px-4 md:px-8 mx-auto">
-      <div className="grid grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-6 gap-4">
         {features.map((feature, index) => {
           const Icon = feature.icon;
           return (

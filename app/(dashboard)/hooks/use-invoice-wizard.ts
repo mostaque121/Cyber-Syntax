@@ -48,7 +48,7 @@ export function useInvoiceWizard({
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
   const [sendEmail, setSendEmail] = useState(false);
   const [completedTabs, setCompletedTabs] = useState<boolean[]>(
-    Array(invoiceTabs.length).fill(false)
+    Array(invoiceTabs.length).fill(false),
   );
 
   const currentTab = invoiceTabs[currentTabIndex];
@@ -111,7 +111,7 @@ export function useInvoiceWizard({
     if (!currentTab.schema) return true;
 
     const fields = Object.keys(
-      currentTab.schema.shape
+      currentTab.schema.shape,
     ) as (keyof InvoiceFormData)[];
     const isValid = await form.trigger(fields);
 
@@ -156,6 +156,16 @@ export function useInvoiceWizard({
   };
 
   // -----------------------------
+  // Reset Wizard State
+  // -----------------------------
+  const resetWizard = () => {
+    setCurrentTabIndex(0);
+    setCompletedTabs(Array(invoiceTabs.length).fill(false));
+    setSendEmail(false);
+    form.reset();
+  };
+
+  // -----------------------------
   // Mutations
   // -----------------------------
   const mutation = useMutation({
@@ -189,6 +199,7 @@ export function useInvoiceWizard({
 
     onSuccess: () => {
       toast.success("Invoice saved successfully");
+      resetWizard();
       onSuccess?.();
     },
     onError: () => toast.error("Failed to save invoice"),
@@ -207,6 +218,7 @@ export function useInvoiceWizard({
     handleNext,
     handlePrevious,
     jumpToStep,
+    resetWizard,
 
     mutation,
 

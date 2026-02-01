@@ -1,10 +1,10 @@
 "use client";
 
-import { DrawerForm } from "@/components/custom-ui/form-drawer";
+import AddEditPanel from "@/components/custom-ui/add-edit-panel";
 import PaginationControl from "@/components/custom-ui/pagination-control";
 import { useUrlParams } from "@/hooks/use-url-params";
 import { useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useCctvPackage } from "../../../hooks/use-cctvpackage";
 import { AddCctvPackageBtn } from "./add-cctvpackage-btn";
 import { CctvPackageForm } from "./cctv-package-form";
@@ -14,7 +14,7 @@ import DashBoardCctvPackageFilter from "./filter-cctvpackage";
 export function CctvPackageClient() {
   const queryClient = useQueryClient();
   const { searchParams, setParam } = useUrlParams();
-  const [editId, setEditId] = useState<string | null>(null);
+  const editId = searchParams.get("editPackage");
   const limit = 20;
 
   const page = searchParams.get("page");
@@ -33,11 +33,20 @@ export function CctvPackageClient() {
     () => cctvPackages.find((p) => p.id === editId),
     [cctvPackages, editId],
   );
-  const isDrawerOpen = Boolean(editId && editItem);
-  const setDrawerOpen = (open: boolean) => {
-    if (!open) {
-      setEditId(null);
-    }
+
+  const isOpen = Boolean(editId && editItem);
+
+  const handleEdit = (id: string) => {
+    setParam("editPackage", id);
+  };
+
+  const handleClose = () => {
+    setParam("editPackage", null);
+  };
+
+  const handleSuccess = () => {
+    handleClose();
+    queryClient.invalidateQueries({ queryKey: ["cctv-packages"] });
   };
 
   return (
@@ -63,7 +72,7 @@ export function CctvPackageClient() {
         isLoading={isLoading}
         isDeleting={false}
         onDelete={() => {}}
-        onEdit={(id) => setEditId(id)}
+        onEdit={handleEdit}
         isError={isError}
         error={error}
         cctvPackages={cctvPackages}
@@ -74,15 +83,20 @@ export function CctvPackageClient() {
         onPageChange={(page) => setParam("page", page.toString())}
       />
 
-      <DrawerForm
-        open={isDrawerOpen}
-        onOpenChange={setDrawerOpen}
-        FormComponent={CctvPackageForm}
-        item={editItem}
-        onSuccess={() => {
-          queryClient.invalidateQueries({ queryKey: ["cctv-packages"] });
-        }}
-      />
+      <AddEditPanel
+        title="Edit CCTV Package"
+        isOpen={isOpen}
+        onClose={handleClose}
+        maxWidth="800px"
+        disableOutsideClick={false}
+        disableEscapeKey={false}
+      >
+        <CctvPackageForm
+          item={editItem}
+          onSuccess={handleSuccess}
+          onCloseForm={handleClose}
+        />
+      </AddEditPanel>
     </div>
   );
 }

@@ -1,10 +1,10 @@
 "use client";
 
-import { DrawerForm } from "@/components/custom-ui/form-drawer";
+import AddEditPanel from "@/components/custom-ui/add-edit-panel";
 import { Button } from "@/components/ui/button";
+import { useUrlParams } from "@/hooks/use-url-params";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
-import { useState } from "react";
 import { ProductForm } from "./product-form";
 
 export function AddProductBtn({
@@ -14,20 +14,40 @@ export function AddProductBtn({
   className?: string;
   onSuccess?: () => void;
 }) {
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const { searchParams, setParam } = useUrlParams();
+  const isOpen = searchParams.get("addProduct") === "true";
+
+  const handleOpen = () => {
+    setParam("addProduct", "true");
+  };
+
+  const handleClose = () => {
+    setParam("addProduct", null);
+  };
+
   return (
     <div className={cn(className)}>
-      <Button onClick={() => setDrawerOpen(true)}>
+      <Button onClick={handleOpen}>
         <Plus />
         Add Product
       </Button>
 
-      <DrawerForm
-        open={drawerOpen}
-        onOpenChange={setDrawerOpen}
-        FormComponent={ProductForm}
-        onSuccess={onSuccess}
-      />
+      <AddEditPanel
+        title="Add New Product"
+        isOpen={isOpen}
+        onClose={handleClose}
+        maxWidth="800px"
+        disableOutsideClick={false}
+        disableEscapeKey={false}
+      >
+        <ProductForm
+          onSuccess={() => {
+            handleClose();
+            onSuccess?.();
+          }}
+          onCloseForm={handleClose}
+        />
+      </AddEditPanel>
     </div>
   );
 }

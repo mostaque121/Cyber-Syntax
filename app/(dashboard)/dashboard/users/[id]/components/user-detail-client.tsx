@@ -209,6 +209,7 @@ export function UserDetailClient({ userId }: UserDetailClientProps) {
     onSuccess: (result) => {
       if (result.success) {
         toast.success("User deleted successfully");
+        queryClient.invalidateQueries({ queryKey: ["users"] });
         router.push("/dashboard/users");
       } else {
         toast.error(result.error || "Failed to delete user");

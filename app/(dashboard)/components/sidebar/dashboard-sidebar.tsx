@@ -27,7 +27,7 @@ export function DashboardSidebar() {
               <div>
                 <SidebarTrigger className="-ml-1" />
                 <Link href={"/"}>
-                  <span className="text-base font-semibold">NextHand</span>
+                  <span className="text-base font-semibold">Cyber Syntax</span>
                 </Link>
               </div>
             </SidebarMenuButton>

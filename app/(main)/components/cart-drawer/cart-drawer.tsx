@@ -33,7 +33,7 @@ export function CartDrawer() {
   };
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full sm:max-w-lg flex flex-col h-screen">
+      <SheetContent className="w-full sm:max-w-lg flex flex-col h-dvh">
         <SheetHeader className="px-6 pt-6">
           <SheetTitle>Shopping Cart</SheetTitle>
           <SheetDescription>

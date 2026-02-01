@@ -1,10 +1,10 @@
 "use client";
 
-import { DrawerForm } from "@/components/custom-ui/form-drawer";
+import AddEditPanel from "@/components/custom-ui/add-edit-panel";
 import { Button } from "@/components/ui/button";
+import { useUrlParams } from "@/hooks/use-url-params";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
-import { useState } from "react";
 import { CctvPackageForm } from "./cctv-package-form";
 
 export function AddCctvPackageBtn({
@@ -14,20 +14,39 @@ export function AddCctvPackageBtn({
   className?: string;
   onSuccess?: () => void;
 }) {
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const { searchParams, setParam } = useUrlParams();
+  const isOpen = searchParams.get("addPackage") === "true";
+
+  const handleOpen = () => {
+    setParam("addPackage", "true");
+  };
+
+  const handleClose = () => {
+    setParam("addPackage", null);
+  };
+
   return (
     <div className={cn(className)}>
-      <Button onClick={() => setDrawerOpen(true)}>
+      <Button onClick={handleOpen}>
         <Plus />
         Add Package
       </Button>
 
-      <DrawerForm
-        open={drawerOpen}
-        onOpenChange={setDrawerOpen}
-        FormComponent={CctvPackageForm}
-        onSuccess={onSuccess}
-      />
+      <AddEditPanel
+        title="Add New Package"
+        isOpen={isOpen}
+        onClose={handleClose}
+        maxWidth="800px"
+        disableOutsideClick={false}
+        disableEscapeKey={false}
+      >
+        <CctvPackageForm
+          onSuccess={() => {
+            handleClose();
+            onSuccess?.();
+          }}
+        />
+      </AddEditPanel>
     </div>
   );
 }

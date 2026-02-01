@@ -5,6 +5,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import {
   ArrowLeftRight,
@@ -65,6 +66,13 @@ const items = [
 
 export function SidebarNav() {
   const pathname = usePathname();
+  const { setOpenMobile, isMobile } = useSidebar();
+
+  const handleClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
 
   return (
     <SidebarGroup>
@@ -78,7 +86,7 @@ export function SidebarNav() {
                 isActive={isActive}
                 tooltip={item.title}
               >
-                <Link href={item.href}>
+                <Link href={item.href} onClick={handleClick}>
                   <item.icon className="h-4 w-4" />
                   <span>{item.title}</span>
                 </Link>

@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+
 import {
   getAllProducts,
   getProductBySlug,
@@ -53,7 +54,7 @@ export default async function Page({
       </div>
       {product.longDescription && (
         <div
-          className="py-16"
+          className="py-16! ql-editor"
           dangerouslySetInnerHTML={{ __html: product.longDescription }}
         />
       )}

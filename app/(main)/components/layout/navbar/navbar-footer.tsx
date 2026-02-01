@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Sheet,
   SheetContent,
@@ -11,6 +13,7 @@ import { ChevronRight, Mail, Menu, Phone } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { CartButton } from "../../cart-drawer/cart-button";
 
 const navItems = [
@@ -23,6 +26,7 @@ const navItems = [
 
 export default function NavFooter() {
   const pathName = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
 
   const phone = process.env.NEXT_PUBLIC_PHONE_NUMBER || "+880 1898-887711";
   const email = process.env.NEXT_PUBLIC_EMAIL || "support@nexthand.com.bd";
@@ -46,7 +50,7 @@ export default function NavFooter() {
       </div>
 
       <div className="md:hidden flex items-center justify-between w-full gap-4">
-        <Sheet>
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger>
             <Menu className="h-6 w-6" />
           </SheetTrigger>
@@ -57,7 +61,7 @@ export default function NavFooter() {
           <SheetContent side="left" className="p-0 w-[300px]">
             {/* Logo Section */}
             <div className="px-6 py-5 border-b border-gray-100">
-              <Link href="/">
+              <Link href="/" onClick={() => setIsOpen(false)}>
                 <Image
                   src="/logo-icon-2.png"
                   className="object-contain"
@@ -78,6 +82,7 @@ export default function NavFooter() {
                   <Link
                     key={item.href}
                     href={item.href}
+                    onClick={() => setIsOpen(false)}
                     className={cn(
                       "flex items-center justify-between px-3 py-3 rounded-lg text-base font-medium transition-all",
                       pathName === item.href ||

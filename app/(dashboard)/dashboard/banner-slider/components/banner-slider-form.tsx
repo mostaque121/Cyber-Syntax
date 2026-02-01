@@ -47,10 +47,10 @@ export function BannerSliderForm({
     defaultValues: {
       image: item?.image || "",
       link: item?.link || "",
-      isActive: item?.isActive || true,
+      isActive: item?.isActive ?? true,
+      imageSmall: item?.imageSmall || "",
     },
   });
-
   const mutation = useMutation({
     mutationFn: async ({ data }: { data: BannerSliderInput }) => {
       if (isEditMode) {
@@ -90,10 +90,6 @@ export function BannerSliderForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <h3 className="text-2xl px-8 font-semibold text-center mt-4">
-          {isEditMode ? "Update" : "Add"} Banner
-        </h3>
-        {/* Image URL */}
         <FormField
           control={form.control}
           name="image"
@@ -104,6 +100,25 @@ export function BannerSliderForm({
                 <ImageUploaderClient
                   aspectRatio={4}
                   uploadPreset="banner"
+                  initialImage={field.value}
+                  onImageUploaded={field.onChange}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* Image URL */}
+        <FormField
+          control={form.control}
+          name="imageSmall"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Image For Mobile</FormLabel>
+              <FormControl>
+                <ImageUploaderClient
+                  aspectRatio={3 / 2}
+                  uploadPreset="banner_for_phone"
                   initialImage={field.value}
                   onImageUploaded={field.onChange}
                 />

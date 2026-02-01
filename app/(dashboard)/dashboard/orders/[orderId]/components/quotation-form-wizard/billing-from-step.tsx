@@ -56,7 +56,7 @@ export function BillingFromStep({ form }: BillingFromStepProps) {
         )}
       />
 
-      <div className="grid items-start grid-cols-2 gap-4">
+      <div className="grid items-start md:grid-cols-2 gap-4">
         {/* Email */}
         <FormField
           control={form.control}

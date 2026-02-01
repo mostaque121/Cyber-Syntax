@@ -18,6 +18,7 @@ export async function createBannerSlider(data: BannerSliderInput) {
   const banner = await prisma.bannerSlider.create({
     data: {
       image: parsedData.image,
+      imageSmall: parsedData.imageSmall,
       link: parsedData.link ?? null,
       isActive: parsedData.isActive,
     },
@@ -38,6 +39,7 @@ export async function updateBannerSlider(id: string, data: BannerSliderInput) {
     where: { id },
     data: {
       image: parsedData.image,
+      imageSmall: parsedData.imageSmall,
       link: parsedData.link ?? null,
       isActive: parsedData.isActive,
     },

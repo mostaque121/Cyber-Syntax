@@ -130,40 +130,43 @@ export function CategoryItem({
         {/* Category Name / Edit Input */}
         <div className="flex-1 flex items-center gap-2">
           {isEditing ? (
-            <div className="flex items-center gap-2 flex-1">
+            <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2 flex-1 w-full">
               <Input
                 value={editingName}
                 onChange={(e) => setEditingName(e.target.value)}
-                className="h-8 text-sm"
+                className="h-8 text-sm flex-1"
                 disabled={isUpdating}
                 autoFocus
               />
               <SlugInput
+                className="flex-1 w-full"
                 initialValue={editingSlug}
                 onGenerate={setEditingSlug}
               />
-              <Button
-                size="sm"
-                variant="ghost"
-                className="h-8 w-8 p-0"
-                onClick={saveEdit}
-                disabled={isUpdating || !editingName.trim()}
-              >
-                {isUpdating ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Check className="h-4 w-4 text-green-600" />
-                )}
-              </Button>
-              <Button
-                size="sm"
-                variant="ghost"
-                className="h-8 w-8 p-0"
-                onClick={cancelEdit}
-                disabled={isUpdating}
-              >
-                <X className="h-4 w-4 text-destructive" />
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-8 w-8 p-0 shrink-0"
+                  onClick={saveEdit}
+                  disabled={isUpdating || !editingName.trim()}
+                >
+                  {isUpdating ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Check className="h-4 w-4 text-green-600" />
+                  )}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-8 w-8 p-0 shrink-0"
+                  onClick={cancelEdit}
+                  disabled={isUpdating}
+                >
+                  <X className="h-4 w-4 text-destructive" />
+                </Button>
+              </div>
             </div>
           ) : (
             <>

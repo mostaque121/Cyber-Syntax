@@ -97,7 +97,9 @@ body {
 .category-card {
   background-color: #f5f8f6;
   border-radius: 12px;
-  box-shadow: 0 8px 24px 0 rgba(1, 194, 122, 0.1), 0 0 0 3px #fff inset;
+  box-shadow:
+    0 8px 24px 0 rgba(1, 194, 122, 0.1),
+    0 0 0 3px #fff inset;
   overflow: hidden;
   padding: 16px;
   z-index: 1;
@@ -105,13 +107,16 @@ body {
 .service-card {
   background-color: #f5f8f6;
   border-radius: 12px;
-  box-shadow: 0 8px 24px 0 rgba(1, 194, 122, 0.1), 0 0 0 3px #fff inset;
+  box-shadow:
+    0 8px 24px 0 rgba(1, 194, 122, 0.1),
+    0 0 0 3px #fff inset;
   overflow: hidden;
   padding: 16px;
   z-index: 1;
 }
 .service-card:hover {
-  box-shadow: 0 8px 24px 0 rgba(51, 194, 122, 0.1),
+  box-shadow:
+    0 8px 24px 0 rgba(51, 194, 122, 0.1),
     0 0 0 1px rgb(51, 194, 122) inset;
   scale: 1.02;
   transition: 0.3s ease all;
@@ -119,7 +124,9 @@ body {
 .product-card {
   background-color: #f5f8f6;
   border-radius: 12px;
-  box-shadow: 0 8px 24px 0 rgba(1, 194, 122, 0.1), 0 0 0 3px #fff inset;
+  box-shadow:
+    0 8px 24px 0 rgba(1, 194, 122, 0.1),
+    0 0 0 3px #fff inset;
   display: block;
   height: 100%;
   overflow: hidden;
@@ -129,7 +136,8 @@ body {
   z-index: 1;
 }
 .product-card:hover {
-  box-shadow: 0 8px 24px 0 rgba(51, 194, 122, 0.1),
+  box-shadow:
+    0 8px 24px 0 rgba(51, 194, 122, 0.1),
     0 0 0 1px rgb(51, 194, 122) inset;
   scale: 1.02;
   transition: 0.3s ease all;
@@ -171,4 +179,11 @@ body {
 .swiper-navigation-icon {
   width: 10px !important;
   font-weight: bold;
+}
+
+.shadow-custom {
+  box-shadow:
+    0 12px 28px 0 rgba(0, 0, 0, 0.2),
+    0 2px 4px 0 rgba(0, 0, 0, 0.2),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
 }

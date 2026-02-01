@@ -1,10 +1,10 @@
 "use client";
 
-import { DrawerForm } from "@/components/custom-ui/form-drawer";
+import AddEditPanel from "@/components/custom-ui/add-edit-panel";
 import { Button } from "@/components/ui/button";
+import { useUrlParams } from "@/hooks/use-url-params";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
-import { useState } from "react";
 import { BannerSliderForm } from "./banner-slider-form";
 
 export function AddBannerBtn({
@@ -14,20 +14,40 @@ export function AddBannerBtn({
   className?: string;
   onSuccess?: () => void;
 }) {
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const { searchParams, setParam } = useUrlParams();
+  const isOpen = searchParams.get("addBanner") === "true";
+
+  const handleOpen = () => {
+    setParam("addBanner", "true");
+  };
+
+  const handleClose = () => {
+    setParam("addBanner", null);
+  };
+
   return (
     <div className={cn(className)}>
-      <Button onClick={() => setDrawerOpen(true)}>
+      <Button onClick={handleOpen}>
         <Plus />
-        Add Product
+        Add Banner
       </Button>
 
-      <DrawerForm
-        open={drawerOpen}
-        onOpenChange={setDrawerOpen}
-        FormComponent={BannerSliderForm}
-        onSuccess={onSuccess}
-      />
+      <AddEditPanel
+        title="Add New Banner"
+        isOpen={isOpen}
+        onClose={handleClose}
+        maxWidth="800px"
+        disableOutsideClick={false}
+        disableEscapeKey={false}
+      >
+        <BannerSliderForm
+          onSuccess={() => {
+            handleClose();
+            onSuccess?.();
+          }}
+          onOpenChange={handleClose}
+        />
+      </AddEditPanel>
     </div>
   );
 }

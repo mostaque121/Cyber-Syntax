@@ -1,10 +1,10 @@
 "use client";
 
-import { DrawerForm } from "@/components/custom-ui/form-drawer";
+import AddEditPanel from "@/components/custom-ui/add-edit-panel";
 import PaginationControl from "@/components/custom-ui/pagination-control";
 import { useUrlParams } from "@/hooks/use-url-params";
 import { useMutation } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { toast } from "sonner";
 import { deleteProduct } from "../../../actions/product-actions";
 import { useProducts } from "../../../hooks/use-product";
@@ -15,7 +15,7 @@ import DashboardProductList from "./product-list";
 
 export function ProductClient() {
   const { searchParams, setParam } = useUrlParams();
-  const [editId, setEditId] = useState<string | null>(null);
+  const editId = searchParams.get("editProduct");
   const limit = 20;
 
   const page = searchParams.get("page");
@@ -46,11 +46,20 @@ export function ProductClient() {
     () => products.find((p) => p.id === editId),
     [products, editId],
   );
-  const isDrawerOpen = Boolean(editId && editItem);
-  const setDrawerOpen = (open: boolean) => {
-    if (!open) {
-      setEditId(null);
-    }
+
+  const isOpen = Boolean(editId && editItem);
+
+  const handleEdit = (id: string) => {
+    setParam("editProduct", id);
+  };
+
+  const handleClose = () => {
+    setParam("editProduct", null);
+  };
+
+  const handleSuccess = () => {
+    handleClose();
+    refetch();
   };
 
   return (
@@ -71,7 +80,7 @@ export function ProductClient() {
         isLoading={isLoading}
         isDeleting={deleteMutation.isPending}
         onDelete={deleteMutation.mutate}
-        onEdit={(id) => setEditId(id)}
+        onEdit={handleEdit}
         isError={isError}
         error={error}
         products={products}
@@ -82,13 +91,20 @@ export function ProductClient() {
         onPageChange={(page) => setParam("page", page.toString())}
       />
 
-      <DrawerForm
-        open={isDrawerOpen}
-        onOpenChange={setDrawerOpen}
-        FormComponent={ProductForm}
-        item={editItem}
-        onSuccess={refetch}
-      />
+      <AddEditPanel
+        title="Edit Product"
+        isOpen={isOpen}
+        onClose={handleClose}
+        maxWidth="800px"
+        disableOutsideClick={false}
+        disableEscapeKey={false}
+      >
+        <ProductForm
+          item={editItem}
+          onSuccess={handleSuccess}
+          onCloseForm={handleClose}
+        />
+      </AddEditPanel>
     </div>
   );
 }

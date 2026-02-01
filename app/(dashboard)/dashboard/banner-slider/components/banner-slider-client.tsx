@@ -1,9 +1,9 @@
 "use client";
 
-import { DrawerForm } from "@/components/custom-ui/form-drawer";
+import AddEditPanel from "@/components/custom-ui/add-edit-panel";
 import { useUrlParams } from "@/hooks/use-url-params";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { getBannerSliders } from "../../../actions/banner-slider";
 import { AddBannerBtn } from "./add-banner-btn";
 import { BannerSliderForm } from "./banner-slider-form";
@@ -12,7 +12,7 @@ import BannerSliderFilter from "./filter";
 
 export function BannerSliderClient() {
   const { searchParams, setParam } = useUrlParams();
-  const [editId, setEditId] = useState<string | null>(null);
+  const editId = searchParams.get("editBanner");
   const isActiveParam = searchParams.get("isActive");
 
   const isActive = (() => {
@@ -20,6 +20,7 @@ export function BannerSliderClient() {
     if (val === "true" || val === "false" || val === "all") return val;
     return "all";
   })();
+
   const { data, isLoading, refetch, isError, error } = useQuery({
     queryKey: ["banner-slider", isActive],
     queryFn: () =>
@@ -33,11 +34,15 @@ export function BannerSliderClient() {
     () => data?.find((p) => p.id === editId),
     [data, editId],
   );
-  const isDrawerOpen = Boolean(editId && editItem);
-  const setDrawerOpen = (open: boolean) => {
-    if (!open) {
-      setEditId(null);
-    }
+
+  const isOpen = Boolean(editId && editItem);
+
+  const handleEdit = (id: string) => {
+    setParam("editBanner", id);
+  };
+
+  const handleClose = () => {
+    setParam("editBanner", null);
   };
 
   return (
@@ -57,16 +62,26 @@ export function BannerSliderClient() {
         isLoading={isLoading}
         isError={isError}
         error={error}
-        onEdit={setEditId}
+        onEdit={handleEdit}
       />
 
-      <DrawerForm
-        open={isDrawerOpen}
-        onOpenChange={setDrawerOpen}
-        FormComponent={BannerSliderForm}
-        item={editItem}
-        onSuccess={refetch}
-      />
+      <AddEditPanel
+        title="Edit Banner"
+        isOpen={isOpen}
+        onClose={handleClose}
+        maxWidth="800px"
+        disableOutsideClick={false}
+        disableEscapeKey={false}
+      >
+        <BannerSliderForm
+          onSuccess={() => {
+            handleClose();
+            refetch();
+          }}
+          item={editItem}
+          onOpenChange={handleClose}
+        />
+      </AddEditPanel>
     </div>
   );
 }

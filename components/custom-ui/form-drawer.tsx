@@ -29,13 +29,13 @@ export function DrawerForm<T>({
 }: DrawerFormProps<T>) {
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
-      <DrawerContent className="h-screen sm:h-auto">
+      <DrawerContent className=" max-h-[70vh] sm:h-auto">
         <DrawerHeader className="hidden">
           <DrawerTitle></DrawerTitle>
           <DrawerDescription></DrawerDescription>
         </DrawerHeader>
 
-        <div className="overflow-y-auto max-w-4xl mx-auto w-full pb-8 sm:max-h-[90vh]">
+        <div className="overflow-y-auto max-w-4xl mx-auto w-full pb-8 max-h-[90dvh]">
           <FormComponent
             onSuccess={onSuccess}
             item={item}

@@ -3,13 +3,7 @@ import {
   OrderSummaryEditType,
   OrderWithAllRelation,
 } from "@/app/(dashboard)/types/order.types";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+import AddEditPanel from "@/components/custom-ui/add-edit-panel";
 import { Payment, ProductOrder, ServiceOrder } from "@/prisma/generated/prisma";
 import { EditSectionType } from "../order-details-client";
 import AddPayment from "./add-payments";
@@ -76,89 +70,85 @@ export default function ProductOrderEditForm({
     "edit-customerInfo": "Edit Customer Info",
   };
   return (
-    <Drawer open={drawerOpen} onOpenChange={onDrawerOpenChange}>
-      <DrawerContent className="h-[95vh] sm:h-auto">
-        <DrawerHeader>
-          {section && (
-            <DrawerTitle>{drawerTitleMap[section] || "Edit"}</DrawerTitle>
+    <AddEditPanel
+      title={section ? drawerTitleMap[section] : "Edit"}
+      isOpen={drawerOpen}
+      onClose={() => onDrawerOpenChange(false)}
+      maxWidth="800px"
+      disableOutsideClick={false}
+      disableEscapeKey={false}
+    >
+      {/* Guard against section being null to ensure form has context */}
+      {section && (
+        <div className="space-y-4">
+          {section === "add-products" && (
+            <AddProducts
+              orderId={itemData.orderId}
+              onSuccess={onSuccess}
+              onCloseForm={onClose}
+            />
           )}
-          <DrawerDescription className="hidden"></DrawerDescription>
-        </DrawerHeader>
-
-        <div className="overflow-y-auto max-w-4xl w-full mx-auto px-4 pb-8 sm:max-h-[70vh]">
-          {/* Guard against section being null to ensure form has context */}
-          {section && (
-            <div className="space-y-4">
-              {section === "add-products" && (
-                <AddProducts
-                  orderId={itemData.orderId}
-                  onSuccess={onSuccess}
-                  onCloseForm={onClose}
-                />
-              )}
-              {section === "edit-product" && editingProduct && (
-                <EditProduct
-                  initialItem={editingProduct}
-                  onSuccess={onSuccess}
-                  onCloseForm={onClose}
-                />
-              )}
-              {section === "add-services" && (
-                <AddServices
-                  orderId={itemData.orderId}
-                  onSuccess={onSuccess}
-                  onCloseForm={onClose}
-                />
-              )}
-              {section === "edit-service" && editingService && (
-                <EditService
-                  initialItem={editingService}
-                  onSuccess={onSuccess}
-                  onCloseForm={onClose}
-                />
-              )}
-              {section === "add-payments" && (
-                <AddPayment
-                  orderId={itemData.orderId}
-                  onSuccess={onSuccess}
-                  onCloseForm={onClose}
-                />
-              )}
-              {section === "edit-payment" && editingPayment && (
-                <EditPayment
-                  initialData={editingPayment}
-                  onSuccess={onSuccess}
-                  onCloseForm={onClose}
-                />
-              )}
-              {section === "edit-orderSummary" && (
-                <EditOrderSummary
-                  orderSummary={orderSummary}
-                  orderId={itemData.orderId}
-                  onSuccess={onSuccess}
-                  onCloseForm={onClose}
-                />
-              )}
-              {section === "edit-orderCost" && (
-                <EditProductOrderCostManagement
-                  orderCost={orderCost}
-                  orderId={itemData.orderId}
-                  onSuccess={onSuccess}
-                  onCloseForm={onClose}
-                />
-              )}
-              {section === "edit-customerInfo" && (
-                <EditProductOrderCustomer
-                  customer={customer}
-                  orderId={itemData.orderId}
-                  onSuccess={onSuccess}
-                  onCloseForm={onClose}
-                />
-              )}
-            </div>
+          {section === "edit-product" && editingProduct && (
+            <EditProduct
+              initialItem={editingProduct}
+              onSuccess={onSuccess}
+              onCloseForm={onClose}
+            />
+          )}
+          {section === "add-services" && (
+            <AddServices
+              orderId={itemData.orderId}
+              onSuccess={onSuccess}
+              onCloseForm={onClose}
+            />
+          )}
+          {section === "edit-service" && editingService && (
+            <EditService
+              initialItem={editingService}
+              onSuccess={onSuccess}
+              onCloseForm={onClose}
+            />
+          )}
+          {section === "add-payments" && (
+            <AddPayment
+              orderId={itemData.orderId}
+              onSuccess={onSuccess}
+              onCloseForm={onClose}
+            />
+          )}
+          {section === "edit-payment" && editingPayment && (
+            <EditPayment
+              initialData={editingPayment}
+              onSuccess={onSuccess}
+              onCloseForm={onClose}
+            />
+          )}
+          {section === "edit-orderSummary" && (
+            <EditOrderSummary
+              orderSummary={orderSummary}
+              orderId={itemData.orderId}
+              onSuccess={onSuccess}
+              onCloseForm={onClose}
+            />
+          )}
+          {section === "edit-orderCost" && (
+            <EditProductOrderCostManagement
+              orderCost={orderCost}
+              orderId={itemData.orderId}
+              onSuccess={onSuccess}
+              onCloseForm={onClose}
+            />
+          )}
+          {section === "edit-customerInfo" && (
+            <EditProductOrderCustomer
+              customer={customer}
+              orderId={itemData.orderId}
+              onSuccess={onSuccess}
+              onCloseForm={onClose}
+            />
           )}
         </div>
-      </DrawerContent>
-    </Drawer>
+      )}
+    </AddEditPanel>
   );
 }

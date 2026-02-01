@@ -92,13 +92,30 @@ export function OrderDetail({ orderId, onBack }: OrderDetailProps) {
   }
 
   const totalPaid = order.payments.reduce((sum, p) => sum + p.amount, 0);
+
+  // Calculate totals from order items
+  const productTotal = order.productOrders.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0,
+  );
+  const serviceTotal = order.serviceOrders.reduce(
+    (sum, item) => sum + item.price,
+    0,
+  );
+
+  // Calculate actual amounts from percentages
+  const productTaxAmount = (productTotal * order.productTax) / 100;
+  const serviceTaxAmount = (serviceTotal * order.serviceTax) / 100;
+  const subtotal = productTotal + serviceTotal + order.shippingCost;
+  const discountAmount = (subtotal * order.discount) / 100;
+
   const orderTotal =
-    (order.productCost || 0) +
-    (order.serviceCost || 0) +
+    productTotal +
+    serviceTotal +
     order.shippingCost +
-    order.productTax +
-    order.serviceTax -
-    order.discount;
+    productTaxAmount +
+    serviceTaxAmount -
+    discountAmount;
   const dueAmount = orderTotal - totalPaid;
 
   return (
@@ -240,16 +257,16 @@ export function OrderDetail({ orderId, onBack }: OrderDetailProps) {
             Payment Summary
           </h3>
           <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-            {order.productCost && order.productCost > 0 && (
+            {productTotal > 0 && (
               <div className="flex justify-between text-sm">
                 <span>Product Cost</span>
-                <span>৳{order.productCost.toLocaleString()}</span>
+                <span>৳{productTotal.toLocaleString()}</span>
               </div>
             )}
-            {order.serviceCost && order.serviceCost > 0 && (
+            {serviceTotal > 0 && (
               <div className="flex justify-between text-sm">
                 <span>Service Cost</span>
-                <span>৳{order.serviceCost.toLocaleString()}</span>
+                <span>৳{serviceTotal.toLocaleString()}</span>
               </div>
             )}
             {order.shippingCost > 0 && (
@@ -262,20 +279,20 @@ export function OrderDetail({ orderId, onBack }: OrderDetailProps) {
             )}
             {order.productTax > 0 && (
               <div className="flex justify-between text-sm">
-                <span>Product Tax</span>
-                <span>৳{order.productTax.toLocaleString()}</span>
+                <span>Product Tax ({order.productTax}%)</span>
+                <span>৳{productTaxAmount.toLocaleString()}</span>
               </div>
             )}
             {order.serviceTax > 0 && (
               <div className="flex justify-between text-sm">
-                <span>Service Tax</span>
-                <span>৳{order.serviceTax.toLocaleString()}</span>
+                <span>Service Tax ({order.serviceTax}%)</span>
+                <span>৳{serviceTaxAmount.toLocaleString()}</span>
               </div>
             )}
             {order.discount > 0 && (
               <div className="flex justify-between text-sm text-green-600">
-                <span>Discount</span>
-                <span>-৳{order.discount.toLocaleString()}</span>
+                <span>Discount ({order.discount}%)</span>
+                <span>-৳{discountAmount.toLocaleString()}</span>
               </div>
             )}
             <Separator className="my-2" />

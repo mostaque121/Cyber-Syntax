@@ -20,6 +20,7 @@ import {
   Quotation,
   Receipt,
 } from "@/app/(dashboard)/types/documents.types";
+import { useUrlParams } from "@/hooks/use-url-params";
 import {
   DocumentType,
   Payment,
@@ -54,8 +55,7 @@ interface OrderDetailsClientProps {
 }
 
 export function OrderDetailsClient({ orderId }: OrderDetailsClientProps) {
-  const [section, setSection] = useState<EditSectionType>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const { searchParams, setParam } = useUrlParams();
   const [editingProduct, setEditingProduct] = useState<ProductOrder | null>(
     null,
   );
@@ -63,10 +63,6 @@ export function OrderDetailsClient({ orderId }: OrderDetailsClientProps) {
     null,
   );
   const [editingPayment, setEditingPayment] = useState<Payment | null>(null);
-  const [docFormOpen, setDocFormOpen] = useState<DocumentType | null>(null);
-  const [docPreviewOpen, setDocPreviewOpen] = useState<DocumentType | null>(
-    null,
-  );
   const [deletingType, setDeletingType] = useState<DocumentType | null>(null);
 
   const {
@@ -126,9 +122,9 @@ export function OrderDetailsClient({ orderId }: OrderDetailsClientProps) {
   }
 
   const openEdit = (sec: EditSectionType) => {
-    setSection(sec);
-    setDrawerOpen(true);
+    setParam("edit", sec);
   };
+  const editOpenParam = searchParams.get("edit");
 
   const openEditProduct = (id: string) => {
     if (!order?.productOrders) return;
@@ -158,26 +154,28 @@ export function OrderDetailsClient({ orderId }: OrderDetailsClientProps) {
     }
   };
   const closeEdit = () => {
-    setDrawerOpen(false);
-    setTimeout(() => {
-      setSection(null);
-    }, 400);
+    setParam("edit", null);
   };
   const handleEditSuccess = () => {
     refetch();
     closeEdit();
   };
   const handleViewDoc = (type: DocumentType) => {
-    setDocPreviewOpen(type);
+    setParam("view-doc", type);
   };
+  const docViewParam = searchParams.get("view-doc");
   const handleDeleteDoc = (id: string, type: DocumentType) => {
     setDeletingType(type);
     deleteDoc.mutate(id);
   };
   const handleSuccessDoc = () => {
     refetch();
-    setDocFormOpen(null);
+    setParam("edit-doc", null);
   };
+  const handleEditDoc = (docType: DocumentType) => {
+    setParam("edit-doc", docType);
+  };
+  const docEditParam = searchParams.get("edit-doc");
 
   return (
     <div className="bg-muted/40 min-h-screen">
@@ -186,8 +184,8 @@ export function OrderDetailsClient({ orderId }: OrderDetailsClientProps) {
         openEditPayment={openEditPayment}
         openEditService={openEditService}
         openEditProduct={openEditProduct}
-        onEditDoc={setDocFormOpen}
-        onGenerateDoc={setDocFormOpen}
+        onEditDoc={handleEditDoc}
+        onGenerateDoc={handleEditDoc}
         order={order}
         openEdit={openEdit}
         onSuccess={refetch}
@@ -196,55 +194,55 @@ export function OrderDetailsClient({ orderId }: OrderDetailsClientProps) {
       />
 
       <ProductOrderEditForm
-        drawerOpen={drawerOpen}
-        onDrawerOpenChange={setDrawerOpen}
+        drawerOpen={editOpenParam !== null}
+        onDrawerOpenChange={() => closeEdit()}
         editingProduct={editingProduct}
         editingService={editingService}
         editingPayment={editingPayment}
-        section={section}
+        section={editOpenParam as EditSectionType}
         itemData={order}
         onClose={closeEdit}
         onSuccess={handleEditSuccess}
       />
 
       <InvoiceFormWizard
-        open={docFormOpen === "INVOICE"}
-        onOpenChange={(open) => !open && setDocFormOpen(null)}
+        open={docEditParam === "INVOICE"}
+        onOpenChange={(open) => !open && setParam("edit-doc", null)}
         onSuccess={handleSuccessDoc}
         order={order}
       />
       <QuotationFormWizard
-        open={docFormOpen === "QUOTATION"}
-        onOpenChange={(open) => !open && setDocFormOpen(null)}
+        open={docEditParam === "QUOTATION"}
+        onOpenChange={(open) => !open && setParam("edit-doc", null)}
         onSuccess={handleSuccessDoc}
         order={order}
       />
       <ReceiptFormWizard
-        open={docFormOpen === "RECEIPT"}
-        onOpenChange={(open) => !open && setDocFormOpen(null)}
-        onSuccess={refetch}
+        open={docEditParam === "RECEIPT"}
+        onOpenChange={(open) => !open && setParam("edit-doc", null)}
+        onSuccess={handleSuccessDoc}
         order={order}
       />
       {order.mappedDocuments?.INVOICE && (
         <InvoicePreview
-          open={docPreviewOpen === "INVOICE"}
-          onOpenChange={(open) => !open && setDocPreviewOpen(null)}
+          open={docViewParam === "INVOICE"}
+          onOpenChange={(open) => !open && setParam("view-doc", null)}
           invoice={order.mappedDocuments.INVOICE.data as Invoice}
           orderId={order.orderId}
         />
       )}
       {order.mappedDocuments?.QUOTATION && (
         <QuotationPreview
-          open={docPreviewOpen === "QUOTATION"}
-          onOpenChange={(open) => !open && setDocPreviewOpen(null)}
+          open={docViewParam === "QUOTATION"}
+          onOpenChange={(open) => !open && setParam("view-doc", null)}
           quotation={order.mappedDocuments.QUOTATION.data as Quotation}
           orderId={order.orderId}
         />
       )}
       {order.mappedDocuments?.RECEIPT && (
         <ReceiptPreview
-          open={docPreviewOpen === "RECEIPT"}
-          onOpenChange={(open) => !open && setDocPreviewOpen(null)}
+          open={docViewParam === "RECEIPT"}
+          onOpenChange={(open) => !open && setParam("view-doc", null)}
           receipt={order.mappedDocuments.RECEIPT.data as Receipt}
           orderId={order.orderId}
         />

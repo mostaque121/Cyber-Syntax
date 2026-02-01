@@ -1,5 +1,6 @@
 "use client";
 
+import { useIsMobile } from "@/hooks/use-mobile";
 import Image from "next/image";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -11,6 +12,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 export default function SwipperSlider({ slides }: { slides: BannerSlider[] }) {
+  const isMobile = useIsMobile();
+
   return (
     <Swiper
       modules={[Autoplay, Navigation, Pagination]}
@@ -28,7 +31,7 @@ export default function SwipperSlider({ slides }: { slides: BannerSlider[] }) {
         <SwiperSlide key={idx}>
           <div className="relative w-full h-full">
             <Image
-              src={item.image}
+              src={isMobile && item.imageSmall ? item.imageSmall : item.image}
               alt={"banner"}
               width={1280}
               height={320}

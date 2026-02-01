@@ -72,7 +72,9 @@ export function HomeContactSection() {
                   <h3 className="font-semibold text-gray-900 text-sm mb-1">
                     {method.title}
                   </h3>
-                  <p className="text-xs text-gray-600">{method.value}</p>
+                  <p className="text-xs text-gray-600 wrap-break-word">
+                    {method.value}
+                  </p>
                 </Card>
               </a>
             );

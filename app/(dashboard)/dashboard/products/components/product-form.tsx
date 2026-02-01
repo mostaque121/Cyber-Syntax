@@ -44,7 +44,7 @@ import { NumberInput } from "@/components/custom-ui/number-input";
 import { CategorySelector } from "../../product-category/components/category-selector";
 const QuillEditor = dynamic(
   () => import("@/components/custom-ui/rich-text-editor"),
-  { ssr: false }
+  { ssr: false },
 );
 
 interface ProductFormProps {
@@ -87,9 +87,8 @@ export function ProductForm({
 
     if (result.success) {
       toast.success(
-        `Product ${isEditMode ? "updated" : "created"} successfully.`
+        `Product ${isEditMode ? "updated" : "created"} successfully.`,
       );
-      onCloseForm?.();
       onSuccess?.();
     } else {
       toast.error("Something went wrong!");
@@ -98,15 +97,7 @@ export function ProductForm({
 
   return (
     <Form {...form}>
-      <div>
-        <h3 className="text-2xl px-8 font-semibold text-center mt-4">
-          {isEditMode ? "Update" : "Add"} Product
-        </h3>
-      </div>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 md:px-8 px-4 py-8"
-      >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {/* Title */}
         <FormField
           control={form.control}

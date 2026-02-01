@@ -3,10 +3,10 @@ import {
   getCctvPackageBySlug,
 } from "@/app/(main)/actions/cctv-package-actions";
 import { notFound } from "next/navigation";
+import "react-quill-new/dist/quill.snow.css";
 import { CctvPackageBreadcrumb } from "./components/cctvpackage-bredcrumb";
 import { CctvPackageDetails } from "./components/cctvpackage-details";
 import { CctvPackageImages } from "./components/cctvpackage-images";
-
 // Generate static params for all CCTV packages
 export async function generateStaticParams() {
   const packages = await getAllCctvPackages();
@@ -40,7 +40,7 @@ export default async function CctvPackagePage({
         />
       </div>
       <div
-        className="py-16"
+        className="py-16! ql-editor"
         dangerouslySetInnerHTML={{ __html: cctvPackage.longDescription }}
       />
     </div>

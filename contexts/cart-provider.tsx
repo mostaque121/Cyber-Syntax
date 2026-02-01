@@ -8,6 +8,7 @@ import {
   updateQuantity as serverUpdateQuantity,
 } from "@/app/(main)/actions/cart-actions";
 import { authClient } from "@/lib/auth-client";
+import { nanoid } from "nanoid";
 import {
   createContext,
   ReactNode,
@@ -75,7 +76,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             items: serverCart.items.map((i) => ({ ...i, cartId: i.cartId })),
             total: serverCart.items.reduce(
               (sum, i) => sum + i.price * i.quantity,
-              0
+              0,
             ),
           });
         } catch (error) {
@@ -111,8 +112,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     serverAction: () => Promise<T>,
     onServerSuccess?: (
       serverResult: T,
-      prev: CartState | null
-    ) => CartState | null
+      prev: CartState | null,
+    ) => CartState | null,
   ) => {
     const prev = cart;
     const optimisticState = optimisticUpdate(prev);
@@ -152,14 +153,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
                   ...i,
                   quantity: Math.min(i.quantity + (item.quantity || 1), 10),
                 }
-              : i
+              : i,
           );
         } else {
           items = [
             ...prev.items,
             {
               ...item,
-              id: "guest-" + crypto.randomUUID(),
+              id: "guest-" + nanoid(),
               cartId: "guest",
               quantity: item.quantity || 1,
             },
@@ -176,7 +177,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
 
     // SERVER LOGIC
-    const tempId = "temp-" + crypto.randomUUID();
+    const tempId = "temp-" + nanoid();
 
     await runWithOptimism(
       // 1. Optimistic Update
@@ -192,7 +193,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
                   ...i,
                   quantity: Math.min(i.quantity + (item.quantity || 1), 10),
                 }
-              : i
+              : i,
           );
         } else {
           items = [
@@ -218,20 +219,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
         if (!prev) return prev;
         // Check if we updated an existing one or added a new one
         const isUpdate = prev.items.some(
-          (i) => i.id === serverItem.id && i.id !== tempId
+          (i) => i.id === serverItem.id && i.id !== tempId,
         );
 
         let items;
         if (isUpdate) {
           items = prev.items.map((i) =>
-            i.id === serverItem.id ? serverItem : i
+            i.id === serverItem.id ? serverItem : i,
           );
         } else {
           // We added a new item, so swap the temp ID for the server ID
           items = prev.items.map((i) =>
             i.id === tempId
               ? { ...i, id: serverItem.id, cartId: serverItem.cartId }
-              : i
+              : i,
           );
         }
 
@@ -240,7 +241,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
           items,
           total: items.reduce((sum, i) => sum + i.price * i.quantity, 0),
         };
-      }
+      },
     );
   };
 
@@ -270,7 +271,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             total: items.reduce((sum, i) => sum + i.price * i.quantity, 0),
           };
         },
-        () => serverRemoveItem(itemId) // Pass itemId (CartItem ID), not ProductID
+        () => serverRemoveItem(itemId), // Pass itemId (CartItem ID), not ProductID
       );
     }
   };
@@ -283,7 +284,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       setCart((prev) => {
         if (!prev) return prev;
         const items = prev.items.map((i) =>
-          i.id === itemId ? { ...i, quantity: qty } : i
+          i.id === itemId ? { ...i, quantity: qty } : i,
         );
         return {
           ...prev,
@@ -296,7 +297,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         (prev) => {
           if (!prev) return prev;
           const items = prev.items.map((i) =>
-            i.id === itemId ? { ...i, quantity: qty } : i
+            i.id === itemId ? { ...i, quantity: qty } : i,
           );
           return {
             ...prev,
@@ -305,7 +306,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
           };
         },
         // FIX: Pass 'itemId' (the CartItem row ID), not 'item.productId'
-        () => serverUpdateQuantity(itemId, qty)
+        () => serverUpdateQuantity(itemId, qty),
       );
     }
   };
@@ -317,7 +318,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       if (cart && cart.items.length > 0) {
         await runWithOptimism(
           (prev) => (prev ? { ...prev, items: [], total: 0 } : prev),
-          () => serverClearCart()
+          () => serverClearCart(),
         );
       }
     }
@@ -345,7 +346,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             total: items.reduce((sum, i) => sum + i.price * i.quantity, 0),
           };
         },
-        async () => Promise.all(itemIds.map((id) => serverRemoveItem(id)))
+        async () => Promise.all(itemIds.map((id) => serverRemoveItem(id))),
       );
     }
   };

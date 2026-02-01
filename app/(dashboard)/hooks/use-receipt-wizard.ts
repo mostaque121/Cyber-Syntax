@@ -42,7 +42,7 @@ export function useReceiptWizard({
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
   const [sendEmail, setSendEmail] = useState(false);
   const [completedTabs, setCompletedTabs] = useState<boolean[]>(
-    Array(receiptTabs.length).fill(false)
+    Array(receiptTabs.length).fill(false),
   );
 
   const currentTab = receiptTabs[currentTabIndex];
@@ -101,7 +101,7 @@ export function useReceiptWizard({
     if (!currentTab.schema) return true;
 
     const fields = Object.keys(
-      currentTab.schema.shape
+      currentTab.schema.shape,
     ) as (keyof ReceiptFormData)[];
     const isValid = await form.trigger(fields);
 
@@ -146,6 +146,16 @@ export function useReceiptWizard({
   };
 
   // -----------------------------
+  // Reset Wizard State
+  // -----------------------------
+  const resetWizard = () => {
+    setCurrentTabIndex(0);
+    setCompletedTabs(Array(receiptTabs.length).fill(false));
+    setSendEmail(false);
+    form.reset();
+  };
+
+  // -----------------------------
   // Mutations
   // -----------------------------
   const mutation = useMutation({
@@ -179,6 +189,7 @@ export function useReceiptWizard({
 
     onSuccess: () => {
       toast.success("Receipt saved successfully");
+      resetWizard();
       onSuccess?.();
     },
     onError: () => toast.error("Failed to save receipt"),
@@ -197,6 +208,7 @@ export function useReceiptWizard({
     handleNext,
     handlePrevious,
     jumpToStep,
+    resetWizard,
 
     mutation,
 
