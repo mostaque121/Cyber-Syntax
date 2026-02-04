@@ -17,18 +17,21 @@ export function calculateOrderTotal(order: {
   // 1) Product subtotal
   const productSubtotal = productOrders.reduce(
     (sum, item) => sum + item.price * item.quantity,
-    0
+    0,
   );
 
   // 2) Service subtotal
   const serviceSubtotal = serviceOrders.reduce(
     (sum, item) => sum + item.price,
-    0
+    0,
   );
 
-  // 3) Tax amounts
-  const productTaxAmount = (productSubtotal * productTax) / 100;
-  const serviceTaxAmount = (serviceSubtotal * serviceTax) / 100;
+  // 3) Tax amounts (Total to submit = Net amount × 100 / (100 − Tax%))
+  // Tax amount = Net × Tax% / (100 − Tax%)
+  const productTaxAmount =
+    productTax < 100 ? (productSubtotal * productTax) / (100 - productTax) : 0;
+  const serviceTaxAmount =
+    serviceTax < 100 ? (serviceSubtotal * serviceTax) / (100 - serviceTax) : 0;
 
   // 4) Total before discount including shipping
   const totalBeforeDiscountAndShipping =

@@ -9,7 +9,7 @@ export async function getBannersSlider() {
     },
   });
 }
-export const getAllCategories = unstable_cache(
+export const getAllBannersSlider = unstable_cache(
   async () => {
     return prisma.bannerSlider.findMany({
       where: {
@@ -20,5 +20,5 @@ export const getAllCategories = unstable_cache(
   ["banner-sliders"], // Cache key
   {
     tags: ["banner-sliders"], // Cache tags for revalidation
-  }
+  },
 );

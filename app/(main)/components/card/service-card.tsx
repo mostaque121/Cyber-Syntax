@@ -15,13 +15,13 @@ export default function ServiceCard({ service }: SectionProps) {
     <Link key={service.href} href={service.href}>
       <div className="service-card cursor-pointer">
         {/* Image Container */}
-        <div className="w-full p-6 flex items-center justify-center pt-2 relative">
+        <div className="w-full aspect-square flex items-center justify-center relative p-2 sm:p-4 md:p-6">
           <Image
             src={service.image}
             alt={service.title}
             width={1000}
             height={1000}
-            className="object-contain p-8"
+            className="object-contain w-full h-full"
           />
         </div>
 

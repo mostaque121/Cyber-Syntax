@@ -1,7 +1,7 @@
 import SwipperSlider from "@/components/custom-ui/swiper-slider";
-import { getBannersSlider } from "../../actions/banner-slider.action";
+import { getAllBannersSlider } from "../../actions/banner-slider.action";
 
 export default async function BannerSliderServer() {
-  const slides = await getBannersSlider();
+  const slides = await getAllBannersSlider();
   return <SwipperSlider slides={slides} />;
 }

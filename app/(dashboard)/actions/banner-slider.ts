@@ -2,6 +2,7 @@
 import { checkAccess } from "@/lib/check-access";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/prisma/generated/prisma";
+import { updateTag } from "next/cache";
 import {
   BannerSliderInput,
   bannerSliderSchema,
@@ -24,6 +25,7 @@ export async function createBannerSlider(data: BannerSliderInput) {
     },
   });
 
+  updateTag("banner-sliders");
   return banner;
 }
 
@@ -44,7 +46,7 @@ export async function updateBannerSlider(id: string, data: BannerSliderInput) {
       isActive: parsedData.isActive,
     },
   });
-
+  updateTag("banner-sliders");
   return banner;
 }
 
@@ -57,7 +59,7 @@ export async function deleteBannerSlider(id: string) {
   const banner = await prisma.bannerSlider.delete({
     where: { id },
   });
-
+  updateTag("banner-sliders");
   return banner;
 }
 
