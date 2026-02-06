@@ -7,12 +7,22 @@ import {
 } from "../types/documents.types";
 import { OrderWithMappedDocuments } from "../types/order.types";
 
+// Company billing info from environment variables
+const getDefaultBillingFrom = (): BillingFrom => ({
+  companyName:
+    process.env.NEXT_PUBLIC_COMPANY_NAME || "Cyber Syntax and Engineering Ltd.",
+  address: process.env.NEXT_PUBLIC_ADDRESS || "Shewrapara, Mirpur, Dhaka",
+  email: process.env.NEXT_PUBLIC_EMAIL || "support@cybersyntax.com.bd",
+  phone: process.env.NEXT_PUBLIC_PHONE_NUMBER || "01912334567",
+  website: process.env.NEXT_PUBLIC_WEBSITE || "www.cybersyntax.com.bd",
+});
+
 // -------------------- INVOICE --------------------
 export function getInvoiceData(order: OrderWithMappedDocuments): Invoice {
   const doc = order.mappedDocuments?.INVOICE;
   const paidAmount = order.payments.reduce(
     (total, payment) => total + (payment.amount ?? 0),
-    0
+    0,
   );
 
   if (doc && doc.data) {
@@ -20,13 +30,7 @@ export function getInvoiceData(order: OrderWithMappedDocuments): Invoice {
     return doc.data as Invoice;
   } else {
     // No invoice exists — generate defaults from the order
-    const defaultBillingFrom: BillingFrom = {
-      companyName: "Cyber Syntax and Engineering Ltd.",
-      address: "Shewrapara,Mirpur,Dhaka",
-      email: "cybersyntax@gmai.com",
-      phone: "01912334567",
-      website: "www.cybersyntax.com",
-    };
+    const defaultBillingFrom = getDefaultBillingFrom();
 
     const defaultBillingTo: BillingTo = {
       customerName: order.customerName,
@@ -73,13 +77,7 @@ export function getQuotationData(order: OrderWithMappedDocuments): Quotation {
     return doc.data as Quotation;
   }
 
-  const billingFrom: BillingFrom = {
-    companyName: "Cyber Syntax and Engineering Ltd.",
-    address: "Shewrapara,Mirpur,Dhaka",
-    email: "cybersyntax@gmai.com",
-    phone: "01912334567",
-    website: "www.cybersyntax.com",
-  };
+  const billingFrom = getDefaultBillingFrom();
 
   const billingTo: BillingTo = {
     customerName: order.customerName,
@@ -114,20 +112,14 @@ export function getReceiptData(order: OrderWithMappedDocuments): Receipt {
   const doc = order.mappedDocuments?.RECEIPT;
   const paidAmount = order.payments.reduce(
     (total, payment) => total + (payment.amount ?? 0),
-    0
+    0,
   );
 
   if (doc?.data) {
     return doc.data as Receipt;
   }
 
-  const billingFrom: BillingFrom = {
-    companyName: "Cyber Syntax and Engineering Ltd.",
-    address: "Shewrapara,Mirpur,Dhaka",
-    email: "cybersyntax@gmai.com",
-    phone: "01912334567",
-    website: "www.cybersyntax.com",
-  };
+  const billingFrom = getDefaultBillingFrom();
 
   const billingTo: BillingTo = {
     customerName: order.customerName,

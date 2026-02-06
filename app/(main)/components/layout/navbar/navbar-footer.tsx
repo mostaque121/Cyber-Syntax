@@ -15,6 +15,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { CartButton } from "../../cart-drawer/cart-button";
+import { GetServiceButton } from "../../common/get-service-button";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -32,7 +33,7 @@ export default function NavFooter() {
   const email = process.env.NEXT_PUBLIC_EMAIL || "support@nexthand.com.bd";
 
   return (
-    <div className="container border-[#262626] border-t-[1.5px] pt-2 mt-2 mx-auto flex  items-center justify-center px-4">
+    <div className="container border-[#262626] border-t-[1.5px] pt-2 mt-2 mx-auto flex  items-center justify-between gap-4 px-4">
       <div className="hidden md:flex items-center gap-6">
         {navItems.map((item) => (
           <Link
@@ -135,9 +136,13 @@ export default function NavFooter() {
           </SheetContent>
         </Sheet>
 
-        <div className="flex md:hidden">
+        <div className="flex items-center gap-4 md:hidden">
+          <GetServiceButton buttonText="Get Service" buttonVariant="default" />
           <CartButton />
         </div>
+      </div>
+      <div className="hidden md:flex">
+        <GetServiceButton buttonText="Get Service" buttonVariant="default" />
       </div>
     </div>
   );

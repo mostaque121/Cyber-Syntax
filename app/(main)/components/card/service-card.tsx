@@ -27,7 +27,7 @@ export default function ServiceCard({ service }: SectionProps) {
 
         {/* Info Overlay */}
         <div className="card-content">
-          <h4 className="text-[16px] text-primary line-clamp-1 text-center font-semibold mb-1">
+          <h4 className="text-[16px] text-primary  text-center font-semibold mb-1">
             {service.title}
           </h4>
           <p className="text-sm text-center">{service.description}</p>

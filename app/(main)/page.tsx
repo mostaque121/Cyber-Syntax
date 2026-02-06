@@ -10,9 +10,8 @@ export default async function HomePage() {
   return (
     <div>
       <BannerSliderServer />
-      <FeaturedProducts />
-
       <OurServices />
+      <FeaturedProducts />
       <FeaturesSection />
       <WhyChooseSection />
       <HomeFaqSection />

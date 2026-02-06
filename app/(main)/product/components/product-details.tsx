@@ -52,7 +52,9 @@ export function ProductDetails({
           {isHotDeal && <Badge className="bg-primary ">Hot Deal</Badge>}
         </h1>
         <h2 className="text-gray-700 text-lg font-semibold mb-2">{brand}</h2>
-        <p className="text-gray-600 leading-relaxed">{description}</p>
+        <p className="text-gray-600 whitespace-nowrap leading-relaxed">
+          {description}
+        </p>
       </div>
 
       {/* Product Type */}

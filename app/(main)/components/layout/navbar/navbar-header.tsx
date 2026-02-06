@@ -14,7 +14,7 @@ interface NavbarHeaderProps {
 
 export function NavbarHeader({ setIsSearchOpen }: NavbarHeaderProps) {
   return (
-    <div className="flex items-center justify-between px-4 lg:px-6 ">
+    <div className="flex container mx-auto items-center justify-between px-4 lg:px-6 ">
       <div className="flex flex-1 items-center space-x-4">
         <Link href="/">
           <div className="relative">

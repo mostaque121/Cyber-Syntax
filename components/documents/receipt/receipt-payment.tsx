@@ -43,14 +43,6 @@ export default function ReceiptPaymentInfo({
 
         <p className="text-sm">
           <span className="font-medium">Payment Method:</span>{" "}
-          {paymentMethod
-            .replace(/_/g, " ")
-            .toLowerCase()
-            .replace(/\b\w/g, (c) => c.toUpperCase())}
-        </p>
-
-        <p className="text-sm">
-          <span className="font-medium">Payment Method:</span>{" "}
           {formatPaymentMethod(paymentMethod)}
         </p>
 

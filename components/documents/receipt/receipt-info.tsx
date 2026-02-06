@@ -5,8 +5,8 @@ interface SectionProps {
   orderId: string;
   issuedDate: Date;
   paymentDate: Date;
-  dueDate?: Date;
   paidAmount: number;
+  due?: number;
 }
 export default function ReceiptInfo({
   receiptNumber,
@@ -14,6 +14,7 @@ export default function ReceiptInfo({
   paidAmount,
   orderId,
   paymentDate,
+  due = 0,
 }: SectionProps) {
   return (
     <div>
@@ -40,6 +41,9 @@ export default function ReceiptInfo({
             <td colSpan={2}>
               <div className="mt-2 bg-gray-200 font-bold py-1 px-2">
                 Paid Amount (BDT): {paidAmount}
+              </div>
+              <div className="mt-2 bg-gray-200 font-bold py-1 px-2">
+                Due: {due}
               </div>
             </td>
           </tr>

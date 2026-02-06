@@ -2,6 +2,7 @@ import {
   OrderProducts,
   OrderServices,
 } from "@/app/(dashboard)/types/documents.types";
+import { calculateOrderTotal } from "@/lib/calculate-total";
 import { formatPrice } from "@/lib/format-price";
 
 interface SectionProps {
@@ -21,27 +22,23 @@ export default function ReceiptItems({
   shippingCost = 0,
   discount = 0,
 }: SectionProps) {
-  const safeNumber = (value?: number) => value ?? 0;
+  const calculate = calculateOrderTotal({
+    productOrders: orderProducts,
+    serviceOrders: orderServices,
+    productTax: productTaxRate,
+    serviceTax: serviceTaxRate,
+    shippingCost,
+    discount,
+  });
 
-  // Subtotals
-  const productSubTotal = orderProducts?.reduce(
-    (sum, item) => sum + safeNumber(item.price) * safeNumber(item.quantity),
-    0
-  );
-  const serviceSubTotal = orderServices?.reduce(
-    (sum, item) => sum + safeNumber(item.price),
-    0
-  );
+  const productSubTotal = calculate.productSubtotal;
+  const serviceSubTotal = calculate.serviceSubtotal;
+  const productTax = calculate.productTaxAmount;
+  const serviceTax = calculate.serviceTaxAmount;
+  const total = calculate.finalTotal;
   const subTotal = productSubTotal + serviceSubTotal;
-
-  // Taxes
-  const productTax = productSubTotal * safeNumber(productTaxRate / 100);
-  const serviceTax = serviceSubTotal * safeNumber(serviceTaxRate / 100);
+  const discountAmount = calculate.discountAmount;
   const totalTax = productTax + serviceTax;
-  const discountAmount = subTotal * (safeNumber(discount) / 100);
-
-  // Total and due
-  const total = subTotal + totalTax + safeNumber(shippingCost) - discountAmount;
 
   // Dynamic tax label
   const taxLabelParts = [];
@@ -110,12 +107,6 @@ export default function ReceiptItems({
             <span className="text-right">Subtotal</span>
             <span className="w-22 text-right">{formatPrice(subTotal)}</span>
           </div>
-          {totalTax > 0 && (
-            <div className="flex justify-end px-3 py-1">
-              <span className="text-right">Tax ({taxLabel})</span>
-              <span className="w-22 text-right">{formatPrice(totalTax)}</span>
-            </div>
-          )}
           {discount > 0 && (
             <div className="flex justify-end px-3 py-1">
               <span>Discount ({discount.toFixed(0)}%)</span>
@@ -124,6 +115,13 @@ export default function ReceiptItems({
               </span>
             </div>
           )}
+          {totalTax > 0 && (
+            <div className="flex justify-end px-3 py-1">
+              <span className="text-right">Tax ({taxLabel})</span>
+              <span className="w-22 text-right">{formatPrice(totalTax)}</span>
+            </div>
+          )}
+
           {shippingCost > 0 && (
             <div className="flex justify-end px-3 py-1">
               <span>Shipping</span>

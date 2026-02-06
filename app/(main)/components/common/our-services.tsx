@@ -31,7 +31,7 @@ const services = [
 export function OurServices() {
   return (
     <div>
-      <div className="container px-4 md:px-8 py-8">
+      <div className="container mx-auto px-4 md:px-8 py-8">
         <h2 className="text-[18px] uppercase pb-4 px-1 mb-4 md:text-[32px] border-b border-[#dee2e6] font-bold text-black">
           Our Services
         </h2>
