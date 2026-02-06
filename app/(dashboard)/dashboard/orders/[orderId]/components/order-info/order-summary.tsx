@@ -35,35 +35,16 @@ export function OrderSummary({ order, onEditClick }: OrderSummaryProps) {
       </CardHeader>
 
       <CardContent className="space-y-3 text-sm">
-        {/* PRODUCTS */}
+        {/* PRODUCTS SUBTOTAL */}
         <div className="flex justify-between">
           <span className="text-muted-foreground">Products Subtotal</span>
           <span>{formatPrice(total.productSubtotal)}</span>
         </div>
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">
-            Product Tax ({order.productTax}%)
-          </span>
-          <span>{formatPrice(total.productTaxAmount)}</span>
-        </div>
 
-        {/* SERVICES */}
+        {/* SERVICES SUBTOTAL */}
         <div className="flex justify-between">
           <span className="text-muted-foreground">Services Subtotal</span>
           <span>{formatPrice(total.serviceSubtotal)}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-muted-foreground">
-            Service Tax ({order.serviceTax}%)
-          </span>
-          <span>{formatPrice(total.serviceTaxAmount)}</span>
-        </div>
-
-        {/* SUBTOTAL */}
-        <div className="my-3 h-px bg-border" />
-        <div className="flex justify-between font-medium">
-          <span>Subtotal</span>
-          <span>{formatPrice(total.totalBeforeDiscountAndShipping)}</span>
         </div>
 
         {/* DISCOUNT */}
@@ -74,6 +55,30 @@ export function OrderSummary({ order, onEditClick }: OrderSummaryProps) {
           <span className="text-emerald-600">
             -{formatPrice(total.discountAmount)}
           </span>
+        </div>
+
+        <div className="my-3 h-px bg-border" />
+
+        {/* SUBTOTAL AFTER DISCOUNT */}
+        <div className="flex justify-between font-medium">
+          <span>Subtotal</span>
+          <span>{formatPrice(total.discountedSubtotal)}</span>
+        </div>
+
+        {/* PRODUCT TAX */}
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">
+            Product Tax ({order.productTax}%)
+          </span>
+          <span>{formatPrice(total.productTaxAmount)}</span>
+        </div>
+
+        {/* SERVICE TAX */}
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">
+            Service Tax ({order.serviceTax}%)
+          </span>
+          <span>{formatPrice(total.serviceTaxAmount)}</span>
         </div>
 
         {/* SHIPPING */}

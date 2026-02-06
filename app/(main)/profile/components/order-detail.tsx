@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
+import { calculateOrderTotal } from "@/lib/calculate-total";
 import { cn } from "@/lib/utils";
 import { OrderStatus, PaymentMethod } from "@/prisma/generated/prisma";
 import { useQuery } from "@tanstack/react-query";
@@ -93,30 +94,9 @@ export function OrderDetail({ orderId, onBack }: OrderDetailProps) {
 
   const totalPaid = order.payments.reduce((sum, p) => sum + p.amount, 0);
 
-  // Calculate totals from order items
-  const productTotal = order.productOrders.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0,
-  );
-  const serviceTotal = order.serviceOrders.reduce(
-    (sum, item) => sum + item.price,
-    0,
-  );
-
-  // Calculate actual amounts from percentages
-  const productTaxAmount = (productTotal * order.productTax) / 100;
-  const serviceTaxAmount = (serviceTotal * order.serviceTax) / 100;
-  const subtotal = productTotal + serviceTotal + order.shippingCost;
-  const discountAmount = (subtotal * order.discount) / 100;
-
-  const orderTotal =
-    productTotal +
-    serviceTotal +
-    order.shippingCost +
-    productTaxAmount +
-    serviceTaxAmount -
-    discountAmount;
-  const dueAmount = orderTotal - totalPaid;
+  // Calculate totals using the shared function
+  const total = calculateOrderTotal(order);
+  const dueAmount = total.finalTotal - totalPaid;
 
   return (
     <Card>
@@ -257,18 +237,48 @@ export function OrderDetail({ orderId, onBack }: OrderDetailProps) {
             Payment Summary
           </h3>
           <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-            {productTotal > 0 && (
+            {/* Product Subtotal */}
+            {total.productSubtotal > 0 && (
               <div className="flex justify-between text-sm">
-                <span>Product Cost</span>
-                <span>৳{productTotal.toLocaleString()}</span>
+                <span>Products Subtotal</span>
+                <span>৳{total.productSubtotal.toLocaleString()}</span>
               </div>
             )}
-            {serviceTotal > 0 && (
+            {/* Service Subtotal */}
+            {total.serviceSubtotal > 0 && (
               <div className="flex justify-between text-sm">
-                <span>Service Cost</span>
-                <span>৳{serviceTotal.toLocaleString()}</span>
+                <span>Services Subtotal</span>
+                <span>৳{total.serviceSubtotal.toLocaleString()}</span>
               </div>
             )}
+            {/* Discount */}
+            {order.discount > 0 && (
+              <div className="flex justify-between text-sm text-green-600">
+                <span>Discount ({order.discount}%)</span>
+                <span>-৳{total.discountAmount.toLocaleString()}</span>
+              </div>
+            )}
+            <Separator className="my-2" />
+            {/* Subtotal after discount */}
+            <div className="flex justify-between text-sm font-medium">
+              <span>Subtotal</span>
+              <span>৳{total.discountedSubtotal.toLocaleString()}</span>
+            </div>
+            {/* Product Tax */}
+            {order.productTax > 0 && (
+              <div className="flex justify-between text-sm">
+                <span>Product Tax ({order.productTax}%)</span>
+                <span>৳{total.productTaxAmount.toLocaleString()}</span>
+              </div>
+            )}
+            {/* Service Tax */}
+            {order.serviceTax > 0 && (
+              <div className="flex justify-between text-sm">
+                <span>Service Tax ({order.serviceTax}%)</span>
+                <span>৳{total.serviceTaxAmount.toLocaleString()}</span>
+              </div>
+            )}
+            {/* Shipping */}
             {order.shippingCost > 0 && (
               <div className="flex justify-between text-sm">
                 <span className="flex items-center gap-1">
@@ -277,29 +287,12 @@ export function OrderDetail({ orderId, onBack }: OrderDetailProps) {
                 <span>৳{order.shippingCost.toLocaleString()}</span>
               </div>
             )}
-            {order.productTax > 0 && (
-              <div className="flex justify-between text-sm">
-                <span>Product Tax ({order.productTax}%)</span>
-                <span>৳{productTaxAmount.toLocaleString()}</span>
-              </div>
-            )}
-            {order.serviceTax > 0 && (
-              <div className="flex justify-between text-sm">
-                <span>Service Tax ({order.serviceTax}%)</span>
-                <span>৳{serviceTaxAmount.toLocaleString()}</span>
-              </div>
-            )}
-            {order.discount > 0 && (
-              <div className="flex justify-between text-sm text-green-600">
-                <span>Discount ({order.discount}%)</span>
-                <span>-৳{discountAmount.toLocaleString()}</span>
-              </div>
-            )}
             <Separator className="my-2" />
+            {/* Total */}
             <div className="flex justify-between font-semibold">
               <span>Order Total</span>
               <span className="text-primary">
-                ৳{orderTotal.toLocaleString()}
+                ৳{total.finalTotal.toLocaleString()}
               </span>
             </div>
           </div>
