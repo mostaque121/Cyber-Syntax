@@ -11,7 +11,7 @@ export const auth = betterAuth({
     if (process.env.NODE_ENV === "development") {
       return ["http://localhost:3000", "http://192.168.0.197:3000"];
     }
-    return ["https://cybersyntax.com.bd"];
+    return ["https://www.cybersyntax.com.bd/", "https://cybersyntax.com.bd/"];
   },
   database: prismaAdapter(prisma, {
     provider: "postgresql",
