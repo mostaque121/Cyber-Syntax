@@ -7,7 +7,7 @@ export default function InvoiceTo({ billingTo }: SectionProps) {
   return (
     <div>
       <div className="w-80 text-wrap">
-        <p className="font-semibold text-gray-700 text-sm">BILL TO</p>
+        <p className="font-semibold text-gray-700 text-sm">INVOICE TO</p>
         <p className="font-semibold mt-1.5">{billingTo.customerName}</p>
         {billingTo.companyName && (
           <p className="text-sm font-medium mt-0.5">{billingTo.companyName}</p>

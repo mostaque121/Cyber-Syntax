@@ -1,13 +1,11 @@
-import Image from "next/image";
+/* eslint-disable @next/next/no-img-element */
 export default function QuotationTopLeftPart({ img }: { img?: string }) {
   return (
     <div className="relative">
-      <Image
-        src={img ?? "/logo-icon-2.png"}
+      <img
+        src={img ?? "/doc-logo.png"}
         alt="Logo"
-        width={120}
-        height={120}
-        className="w-full  px-8  object-contain"
+        className="h-20 w-auto px-8  object-contain"
       />
     </div>
   );

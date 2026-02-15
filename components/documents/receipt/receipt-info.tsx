@@ -42,9 +42,11 @@ export default function ReceiptInfo({
               <div className="mt-2 bg-gray-200 font-bold py-1 px-2">
                 Paid Amount (BDT): {paidAmount}
               </div>
-              <div className="mt-2 bg-gray-200 font-bold py-1 px-2">
-                Due: {due}
-              </div>
+              {due > 0 && (
+                <div className="mt-2 bg-gray-200 font-bold py-1 px-2">
+                  Due: {due}
+                </div>
+              )}
             </td>
           </tr>
         </tbody>

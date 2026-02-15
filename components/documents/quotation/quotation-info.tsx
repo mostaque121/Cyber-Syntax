@@ -5,12 +5,14 @@ interface SectionProps {
   orderId: string;
   quotationDate: Date;
   validUntil?: Date;
+  total: number;
 }
 export default function QuotationInfo({
   quotationNumber,
   quotationDate,
   validUntil,
   orderId,
+  total,
 }: SectionProps) {
   return (
     <div>
@@ -34,6 +36,14 @@ export default function QuotationInfo({
               <td>{format(validUntil, "MMMM d, yyyy")}</td>
             </tr>
           )}
+
+          <tr>
+            <td colSpan={2}>
+              <div className="mt-2 bg-gray-200 font-bold py-1 px-2">
+                Total (BDT): {total}
+              </div>
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>

@@ -86,10 +86,7 @@ export function GetServiceButton({
       <DrawerTrigger asChild>
         <Button
           variant={buttonVariant}
-          className={cn(
-            "bg-primary hover:bg-green-600 text-white",
-            buttonClassName,
-          )}
+          className={cn("bg-green-600  text-white", buttonClassName)}
         >
           {buttonText}
         </Button>

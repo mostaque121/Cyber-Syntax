@@ -161,19 +161,19 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             {/* Copyright */}
             <p className="text-sm text-gray-500">
-              © {currentYear} Nexthand. All rights reserved.
+              © {currentYear} Cyber Syntax. All rights reserved.
             </p>
 
             {/* Developer Credits */}
             <p className="text-sm text-gray-500">
               Developed by{" "}
               <Link
-                href="https://webnpixel.com"
+                href="#"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary font-medium hover:text-teal-300 transition-colors"
               >
-                WebNPixel
+                Cyber Syntax
               </Link>
             </p>
           </div>

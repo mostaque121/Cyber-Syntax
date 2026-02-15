@@ -4,7 +4,7 @@ export function NetworkingSolutionHero() {
   return (
     <div className="relative">
       <Image
-        src="/banner-1.png"
+        src="/networking-banner-pc.png"
         alt="banner"
         width={1200}
         height={300}

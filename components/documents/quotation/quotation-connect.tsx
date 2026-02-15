@@ -1,4 +1,5 @@
 import { Quotation } from "@/app/(dashboard)/types/documents.types";
+import { calculateOrderTotal } from "@/lib/calculate-total";
 import QuotationFooter from "./quotation-footer";
 import QuotationInfo from "./quotation-info";
 import QuotationItems from "./quotation-items";
@@ -11,6 +12,15 @@ interface SectionProps {
   orderId: string;
 }
 export default function QuotationConnect({ quotation, orderId }: SectionProps) {
+  const safeNumber = (value?: number) => value ?? 0;
+  const calculate = calculateOrderTotal({
+    productOrders: quotation.orderProducts,
+    serviceOrders: quotation.orderServices,
+    productTax: quotation.productTaxPercentage,
+    serviceTax: quotation.serviceTaxPercentage,
+    shippingCost: quotation.shippingCost,
+    discount: quotation.discount,
+  });
   return (
     <div className="min-h-[256mm] w-[210mm] shrink-0 bg-white flex flex-col">
       <div className="flex border-b-[1.5px] border-gray-200 pb-4 justify-between">
@@ -25,6 +35,7 @@ export default function QuotationConnect({ quotation, orderId }: SectionProps) {
           validUntil={quotation.validUntil}
           quotationNumber={quotation.quotationNumber ?? "QUO-1234"}
           orderId={orderId}
+          total={safeNumber(calculate.finalTotal)}
         />
       </div>
 
