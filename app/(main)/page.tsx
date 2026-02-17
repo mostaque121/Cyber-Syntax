@@ -158,9 +158,9 @@ const homePageSchema = {
 };
 
 export const metadata: Metadata = {
-  title: "Best IT Solutions & Security Services in Bangladesh",
+  title: " Tech Solutions & Services",
   description:
-    "Cyber Syntax provides top-quality CCTV installation, networking solutions, IT support, and software development services in Dhaka, Bangladesh. Trusted technology partner for businesses and homes.",
+    "Professional IT support, CCTV installation, networking solutions, and software services in Bangladesh. Quality tech products and reliable service from CyberSyntax.",
   keywords: [
     "Cyber Syntax",
     "IT solutions Bangladesh",
