@@ -24,39 +24,12 @@ const robotoFlex = Roboto_Flex({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://cybersyntax.com.bd"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_BASE_URL || "https://cybersyntax.com.bd",
+  ),
   title: {
     default: "Cyber Syntax",
     template: "%s | Cyber Syntax",
-  },
-  description:
-    "Cyber Syntax - Your trusted IT solutions partner in Bangladesh. We offer professional CCTV installation, IT support, software development, networking solutions, and quality tech products at competitive prices.",
-  keywords: [
-    "CCTV installation",
-    "IT support",
-    "software development",
-    "networking solutions",
-    "tech products",
-    "Bangladesh",
-    "Dhaka",
-    "IT solutions",
-    "security cameras",
-    "computer services",
-  ],
-  authors: [{ name: "Cyber Syntax" }],
-  openGraph: {
-    title: "Cyber Syntax - IT Solutions & Tech Products",
-    description:
-      "Professional CCTV installation, IT support, software development, networking solutions, and quality tech products in Bangladesh.",
-    type: "website",
-    locale: "en_BD",
-    siteName: "Cyber Syntax",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Cyber Syntax - IT Solutions & Tech Products",
-    description:
-      "Professional CCTV installation, IT support, software development, networking solutions, and quality tech products in Bangladesh.",
   },
 };
 

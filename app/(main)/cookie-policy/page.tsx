@@ -3,7 +3,14 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Cookie Policy",
   description:
-    "Learn how Cyber Syntax uses cookies and similar technologies to enhance your browsing experience.",
+    "Learn how Cyber Syntax uses cookies and similar technologies to enhance your browsing experience on our website.",
+  alternates: {
+    canonical: "/cookie-policy",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function CookiePolicyPage() {

@@ -5,16 +5,28 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { auth } from "@/lib/auth";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { LoginForm } from "../components/login/login-form";
 
 export const metadata: Metadata = {
   title: "Sign In",
-  description: "Sign in to your account",
+  description:
+    "Sign in to your Cyber Syntax account to manage orders, track shipments, and access exclusive features.",
 };
 
-export default function LogInPage() {
+export default async function LogInPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (session?.user) {
+    redirect("/");
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">

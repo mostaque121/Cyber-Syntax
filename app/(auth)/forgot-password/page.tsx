@@ -8,12 +8,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { authClient } from "@/lib/auth-client";
 import { ResetPasswordFormData } from "../validation/auth.validation";
 
 import { useOtpCountdown } from "@/hooks/use-countdown";
+import { useRouter } from "next/navigation";
 import { EmailStep } from "../components/forgot-password/email-step";
 import { OtpStep } from "../components/forgot-password/otp-step";
 import { StepIndicator } from "../components/forgot-password/step-indicator";
@@ -21,6 +22,8 @@ import { SuccessStep } from "../components/forgot-password/success-step";
 type Step = "email" | "otp" | "complete";
 
 export default function MultiStepForgotPassword() {
+  const router = useRouter();
+  const { data: session, isPending } = authClient.useSession();
   const { countdown, startCountdown } = useOtpCountdown(60);
   const [currentStep, setCurrentStep] = useState<Step>("email");
   const [userEmail, setUserEmail] = useState<string>("");
@@ -28,6 +31,13 @@ export default function MultiStepForgotPassword() {
   const [isResending, setIsResending] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
+
+  // Redirect to home if user is already logged in
+  useEffect(() => {
+    if (!isPending && session?.user) {
+      router.replace("/");
+    }
+  }, [session, isPending, router]);
 
   /** Clear messages */
   const clearMessages = () => {

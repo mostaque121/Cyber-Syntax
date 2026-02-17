@@ -57,10 +57,10 @@ const pageItems: SearchItem[] = [
 ];
 
 const serviceItems: SearchItem[] = [
-  { title: "CCTV Camera Installation", url: "/services#cctv" },
-  { title: "IT Support & Maintenance", url: "/services#it-support" },
-  { title: "Software Development", url: "/services#software" },
-  { title: "Networking Solutions", url: "/services#networking" },
+  { title: "CCTV Camera Installation", url: "/services/cctv-solution" },
+  { title: "IT Support & Maintenance", url: "/services/it-support" },
+  { title: "Software Development", url: "/services/software-development" },
+  { title: "Networking Solutions", url: "/services/networking-solutions" },
 ];
 
 // -------------------

@@ -3,7 +3,14 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Terms of Service",
   description:
-    "Read our terms of service to understand the rules and regulations for using Cyber Syntax.",
+    "Read our terms of service to understand the rules and regulations for using Cyber Syntax services and website.",
+  alternates: {
+    canonical: "/terms-of-service",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function TermsOfServicePage() {

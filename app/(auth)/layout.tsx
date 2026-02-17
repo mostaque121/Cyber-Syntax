@@ -1,6 +1,12 @@
 import { Metadata } from "next/types";
 
 export const metadata: Metadata = {
+  title: {
+    default: "Account",
+    template: "%s | Cyber Syntax",
+  },
+  description:
+    "Cyber Syntax account management - Sign in, sign up, and manage your account.",
   robots: {
     index: false,
     follow: false,
@@ -11,8 +17,6 @@ export const metadata: Metadata = {
       noimageindex: true,
     },
   },
-  title: "Sign in",
-  description: "Sign in - Private Area",
 };
 export default function RootLayout({
   children,

@@ -3,7 +3,14 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "Learn how Cyber Syntax collects, uses, and protects your personal information.",
+    "Learn how Cyber Syntax collects, uses, and protects your personal information. Your privacy matters to us.",
+  alternates: {
+    canonical: "/privacy-policy",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function PrivacyPolicyPage() {

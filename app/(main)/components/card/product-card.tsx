@@ -48,7 +48,7 @@ export default function ProductCard({ product }: SectionProps) {
 
         {/* Info Overlay */}
         <div className="card-content">
-          <h4 className="text-[14px]  line-clamp-1 text-center font-semibold mb-1">
+          <h4 className="text-[14px]  line-clamp-3 text-center font-semibold mb-1">
             {product.title}
           </h4>
           <div>

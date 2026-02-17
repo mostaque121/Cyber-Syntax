@@ -4,7 +4,14 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Refund Policy",
   description:
-    "Learn about Cyber Syntax's refund and return policy for products and services.",
+    "Learn about Cyber Syntax's refund and return policy for products and services. Clear guidelines for hassle-free returns.",
+  alternates: {
+    canonical: "/refund-policy",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RefundPolicyPage() {

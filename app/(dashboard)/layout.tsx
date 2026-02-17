@@ -7,6 +7,12 @@ import { Metadata } from "next/types";
 import { DashboardSidebar } from "./components/sidebar/dashboard-sidebar";
 
 export const metadata: Metadata = {
+  title: {
+    default: "Dashboard",
+    template: "%s | Cyber Syntax Admin",
+  },
+  description:
+    "Cyber Syntax Admin Dashboard - Manage products, orders, customers, and settings.",
   robots: {
     index: false,
     follow: false,
@@ -17,8 +23,6 @@ export const metadata: Metadata = {
       noimageindex: true,
     },
   },
-  title: "Admin Dashboard",
-  description: "Admin Dashboard - Private Area",
 };
 
 export default async function RootLayout({
