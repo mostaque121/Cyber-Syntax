@@ -1,9 +1,11 @@
 import { CartProvider } from "@/contexts/cart-provider";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { MessageSquareText } from "lucide-react";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getAllProducts } from "./actions/product-actions";
 import { CartDrawer } from "./components/cart-drawer/cart-drawer";
+import { GetServiceButton } from "./components/common/get-service-button";
 import Footer from "./components/layout/footer";
 import Navbar from "./components/layout/navbar";
 
@@ -66,6 +68,27 @@ export default async function RootLayout({
 
       {children}
       <Footer />
+      {/* Floating Get Service Button - visually distinct and user-friendly */}
+      <div
+        className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-1"
+        style={{ pointerEvents: "none" }}
+      >
+        <span
+          className="mb-1 mr-1 px-3 py-1 rounded-full bg-white/90 text-green-700 text-xs font-semibold shadow-md animate-fadeInUp select-none"
+          style={{ pointerEvents: "auto" }}
+        >
+          Need Help?
+        </span>
+        <div style={{ pointerEvents: "auto" }}>
+          <GetServiceButton
+            buttonText={
+              <MessageSquareText className="w-10 h-10 md:w-14 md:h-14 text-white drop-shadow-lg" />
+            }
+            buttonVariant="default"
+            buttonClassName="rounded-full shadow-xl w-14 h-14 md:w-16 md:h-16 p-0 aspect-square bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center border-2 border-white animate-floatPulse hover:scale-110 transition-transform duration-200"
+          />
+        </div>
+      </div>
       {GA_MEASUREMENT_ID && <GoogleAnalytics gaId={GA_MEASUREMENT_ID} />}
     </CartProvider>
   );

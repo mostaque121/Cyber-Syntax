@@ -30,11 +30,11 @@ interface CategoryItemProps {
 const CategoryItem = ({ item, level }: CategoryItemProps) => {
   const path = usePathname();
   const [expanded, setExpanded] = useState(
-    path.startsWith(`/products/${item.fullPath}`)
+    path.startsWith(`/products/${item.fullPath}`),
   );
   const hasChildren = item.children.length > 0;
   const indentPx = level === 0 ? 12 : level === 1 ? 24 : 36;
-
+  console.log("Rendering CategoryItem:", item.slug, "Expanded:", expanded);
   return (
     <div>
       <div className="flex items-center gap-0 group">

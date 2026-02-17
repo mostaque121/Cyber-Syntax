@@ -7,7 +7,7 @@ export default function ReceiptTopRightPart({ billingFrom }: SectionProps) {
   return (
     <div className="pr-8">
       <div className="text-right">
-        <h2 className="text-xl font-bold m-0">RECEIPT</h2>
+        <h2 className="text-xl font-bold m-0">BILL</h2>
         <p className="mt-2 leading-tight font-semibold text-base">
           {billingFrom.companyName}
         </p>

@@ -8,11 +8,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Folder, Plus } from "lucide-react";
 import { useCallback, useState } from "react";
+import { toast } from "sonner";
 
 // Interfaces (Moved from original component)
 export interface Category {
   id: string;
   name: string;
+  slug: string;
   parentId: string | null;
   children: Category[];
 }
@@ -32,17 +34,18 @@ interface CategoryManagerProps {
 import { CategoryItem } from "./category-item";
 import { DeleteConfirmationDialog } from "./delete-confirmation-dialog";
 import { NewCategoryInput } from "./new-category-input";
+
 // ----------------------------------------------------
 
 export function CategoryManager({ categories }: CategoryManagerProps) {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
   const [editingCategory, setEditingCategory] = useState<string | null>(null);
   const [editingName, setEditingName] = useState("");
-  const [editingSlug, setEditingSLug] = useState("");
+  const [editingSlug, setEditingSlug] = useState("");
   const [newCategoryName, setNewCategoryName] = useState("");
-  const [newCategorySlug, setNewCaegorySlug] = useState("");
+  const [newCategorySlug, setNewCategorySlug] = useState("");
   // Parent ID for the *next* category to be added
   const [addingToParent, setAddingToParent] = useState<string | null>(null);
   const [openRootAdd, setOpenRootAdd] = useState<boolean>(false);
@@ -75,6 +78,7 @@ export function CategoryManager({ categories }: CategoryManagerProps) {
   const handleStartEditing = useCallback((category: Category) => {
     setEditingCategory(category.id);
     setEditingName(category.name);
+    setEditingSlug(category.slug);
   }, []);
 
   const handleSaveEdit = async () => {
@@ -86,13 +90,15 @@ export function CategoryManager({ categories }: CategoryManagerProps) {
       await updateCategory({
         id: editingCategory,
         name: editingName.trim(),
-        slug: editingCategory.trim(),
+        slug: editingSlug.trim(),
       });
       setEditingCategory(null);
       setEditingName("");
-      setEditingSLug("");
+      setEditingSlug("");
+      toast.success("Category updated successfully");
     } catch (error) {
       console.error("Failed to update category:", error);
+      toast.error("Failed to update category");
     } finally {
       setLoadingStates((prev) => ({ ...prev, updating: null }));
     }
@@ -101,7 +107,7 @@ export function CategoryManager({ categories }: CategoryManagerProps) {
   const handleCancelEdit = useCallback(() => {
     setEditingCategory(null);
     setEditingName("");
-    setEditingSLug("");
+    setEditingSlug("");
   }, []);
 
   const handleConfirmDelete = useCallback(
@@ -109,7 +115,7 @@ export function CategoryManager({ categories }: CategoryManagerProps) {
       setCategoryToDelete({ id: categoryId, name: categoryName });
       setDeleteConfirmOpen(true);
     },
-    []
+    [],
   );
 
   const handleDelete = async () => {
@@ -140,7 +146,7 @@ export function CategoryManager({ categories }: CategoryManagerProps) {
         slug: newCategorySlug.trim(),
       });
       setNewCategoryName("");
-      setNewCaegorySlug("");
+      setNewCategorySlug("");
       setAddingToParent(null); // Clear adding mode
       if (parentId) {
         setExpandedCategories((prev) => new Set([...prev, parentId]));
@@ -160,13 +166,13 @@ export function CategoryManager({ categories }: CategoryManagerProps) {
   const handleCancelAdding = useCallback(() => {
     setAddingToParent(null);
     setNewCategoryName("");
-    setNewCaegorySlug("");
+    setNewCategorySlug("");
   }, []);
   const handleCancelAddingToRoot = useCallback(() => {
     setAddingToParent(null);
     setOpenRootAdd(false);
     setNewCategoryName("");
-    setNewCaegorySlug("");
+    setNewCategorySlug("");
   }, []);
 
   // --- Rendering Logic ---
@@ -190,7 +196,7 @@ export function CategoryManager({ categories }: CategoryManagerProps) {
       // New Category Input Props
       newCategoryName={newCategoryName}
       setNewCategoryName={setNewCategoryName}
-      setNewCategorySlug={setNewCaegorySlug}
+      setNewCategorySlug={setNewCategorySlug}
       newCategorySlug={newCategorySlug}
       addCategory={handleAddCategory}
       cancelAdding={handleCancelAdding}
@@ -199,7 +205,7 @@ export function CategoryManager({ categories }: CategoryManagerProps) {
       editingName={editingName}
       setEditingName={setEditingName}
       editingSlug={editingSlug}
-      setEditingSlug={setEditingSLug}
+      setEditingSlug={setEditingSlug}
     />
   );
 
@@ -212,7 +218,7 @@ export function CategoryManager({ categories }: CategoryManagerProps) {
             onClick={() => {
               setAddingToParent(null); // Explicitly set to root add mode
               setNewCategoryName("");
-              setNewCaegorySlug("");
+              setNewCategorySlug("");
               setOpenRootAdd(true);
             }}
             className="bg-primary hover:bg-primary/90"
@@ -232,7 +238,7 @@ export function CategoryManager({ categories }: CategoryManagerProps) {
               categoryName={newCategoryName}
               setCategoryName={setNewCategoryName}
               categorySlug={newCategorySlug}
-              setCategorySlug={setNewCaegorySlug}
+              setCategorySlug={setNewCategorySlug}
               addCategory={handleAddCategory}
               isCreating={loadingStates.creating}
               cancelAdding={handleCancelAddingToRoot}

@@ -47,7 +47,7 @@ export function ProductDetails({
     <div className="space-y-6 bg-[#f5f5f5] rounded-lg p-8 w-full md:ml-[8.33%] md:w-1/2">
       {/* Title and description */}
       <div>
-        <h1 className="md:text-3xl text-xl flex items-center gap-3 font-bold text-gray-900 mb-2">
+        <h1 className="md:text-3xl text-lg flex items-center gap-3 font-bold text-gray-900 mb-2">
           {title}
           {isHotDeal && <Badge className="bg-primary ">Hot Deal</Badge>}
         </h1>

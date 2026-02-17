@@ -95,7 +95,7 @@ export function ProductList({
         </div>
 
         {/* PRODUCT CARDS */}
-        <div className="mb-8 grid mt-6 md:mt-0 md:flex-1 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 lg:grid-cols-4">
+        <div className="mb-8 grid mt-6 md:mt-0 md:flex-1 grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 lg:grid-cols-4">
           {visibleProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

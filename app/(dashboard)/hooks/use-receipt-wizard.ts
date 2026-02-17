@@ -54,7 +54,7 @@ export function useReceiptWizard({
     resolver: zodResolver(receiptFullSchema),
     mode: "onBlur",
     defaultValues: {
-      receiptNumber: initialData?.receiptNumber || createUniqueId("RCP"),
+      receiptNumber: initialData?.receiptNumber || createUniqueId("BILL"),
       issuedDate: initialData?.issuedDate
         ? new Date(initialData.issuedDate)
         : new Date(),

@@ -15,7 +15,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { CartButton } from "../../cart-drawer/cart-button";
-import { GetServiceButton } from "../../common/get-service-button";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -34,7 +33,7 @@ export default function NavFooter() {
 
   return (
     <div className="container border-[#262626] border-t-[1.5px] pt-2 mt-2 mx-auto flex  items-center justify-between gap-4 px-4">
-      <div className="hidden md:flex items-center gap-6">
+      <div className="hidden md:flex md:w-full items-center justify-center gap-6">
         {navItems.map((item) => (
           <Link
             key={item.href}
@@ -50,7 +49,7 @@ export default function NavFooter() {
         ))}
       </div>
 
-      <div className="md:hidden flex items-center justify-between w-full gap-4">
+      <div className="md:hidden flex items-center justify-between  w-full gap-4">
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger>
             <Menu className="h-6 w-6" />
@@ -137,12 +136,8 @@ export default function NavFooter() {
         </Sheet>
 
         <div className="flex items-center gap-4 md:hidden">
-          <GetServiceButton buttonText="Get Service" buttonVariant="default" />
           <CartButton />
         </div>
-      </div>
-      <div className="hidden md:flex">
-        <GetServiceButton buttonText="Get Service" buttonVariant="default" />
       </div>
     </div>
   );

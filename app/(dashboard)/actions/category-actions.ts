@@ -18,10 +18,9 @@ export interface UpdateCategoryData {
 
 // Helper: generate full path recursively
 async function generateFullPath(
-  name: string,
+  slug: string,
   parentId?: string | null,
 ): Promise<string> {
-  const slug = slugify(name, { lower: true });
   if (!parentId) return slug;
 
   const parent = await prisma.category.findUnique({ where: { id: parentId } });
@@ -45,7 +44,7 @@ export async function createCategory(data: CreateCategoryData) {
   }
   try {
     const slug = data.slug ?? slugify(data.name, { lower: true });
-    const fullPath = await generateFullPath(data.name, data.parentId);
+    const fullPath = await generateFullPath(slug, data.parentId);
     const level = await calculateLevel(data.parentId);
 
     const category = await prisma.category.create({
@@ -82,7 +81,7 @@ export async function updateCategory(data: UpdateCategoryData) {
     });
     if (!category) return { success: false, error: "Category not found" };
 
-    const fullPath = await generateFullPath(data.name, category.parentId);
+    const fullPath = await generateFullPath(slug, category.parentId);
     const level = await calculateLevel(category.parentId);
 
     const updatedCategory = await prisma.category.update({
@@ -191,7 +190,14 @@ export async function moveCategoryToParent(
     return { error: access.error };
   }
   try {
-    const fullPath = await generateFullPath(categoryId, newParentId);
+    // Fetch the category to get its slug
+    const existingCategory = await prisma.category.findUnique({
+      where: { id: categoryId },
+    });
+    if (!existingCategory)
+      return { success: false, error: "Category not found" };
+
+    const fullPath = await generateFullPath(existingCategory.slug, newParentId);
     const level = await calculateLevel(newParentId);
 
     const category = await prisma.category.update({

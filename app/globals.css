@@ -1,3 +1,29 @@
+/* Floating Get Service Button Animations */
+@keyframes floatPulse {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+.animate-floatPulse {
+  animation: floatPulse 2.5s ease-in-out infinite;
+}
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fadeInUp {
+  animation: fadeInUp 0.7s cubic-bezier(0.39, 0.575, 0.565, 1) both;
+}
 @import "tailwindcss";
 @import "tw-animate-css";
 

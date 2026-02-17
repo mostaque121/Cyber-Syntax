@@ -21,7 +21,7 @@ export default function ReceiptInfo({
       <table className="text-sm">
         <tbody>
           <tr>
-            <td className="font-bold pr-2">Receipt Number:</td>
+            <td className="font-bold pr-2">Bill Number:</td>
             <td>{receiptNumber}</td>
           </tr>
           <tr>
