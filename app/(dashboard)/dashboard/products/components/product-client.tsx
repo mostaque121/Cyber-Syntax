@@ -4,7 +4,7 @@ import AddEditPanel from "@/components/custom-ui/add-edit-panel";
 import PaginationControl from "@/components/custom-ui/pagination-control";
 import { useUrlParams } from "@/hooks/use-url-params";
 import { useMutation } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { deleteProduct } from "../../../actions/product-actions";
 import { useProducts } from "../../../hooks/use-product";
@@ -17,7 +17,7 @@ export function ProductClient() {
   const { searchParams, setParam } = useUrlParams();
   const editId = searchParams.get("editProduct");
   const limit = 20;
-
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const page = searchParams.get("page");
   const search = searchParams.get("search");
   const filter = searchParams.get("filter");
@@ -62,6 +62,15 @@ export function ProductClient() {
     refetch();
   };
 
+  const handleDelete = (id: string) => {
+    setDeletingId(id);
+    deleteMutation.mutate(id, {
+      onSettled: () => {
+        setDeletingId(null);
+      },
+    });
+  };
+
   return (
     <div className="px-4 md:px-8 py-8 container mx-auto">
       <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
@@ -78,8 +87,8 @@ export function ProductClient() {
       <DashboardProductList
         className="mt-6"
         isLoading={isLoading}
-        isDeleting={deleteMutation.isPending}
-        onDelete={deleteMutation.mutate}
+        deletingId={deletingId}
+        onDelete={handleDelete}
         onEdit={handleEdit}
         isError={isError}
         error={error}

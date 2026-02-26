@@ -12,7 +12,7 @@ interface ProductListProps {
   className?: string;
   onDelete: (id: string) => void;
   onEdit: (id: string) => void;
-  isDeleting?: boolean;
+  deletingId?: string | null;
 }
 
 export default function DashboardProductList({
@@ -23,7 +23,7 @@ export default function DashboardProductList({
   className,
   onEdit,
   onDelete,
-  isDeleting,
+  deletingId,
 }: ProductListProps) {
   if (isLoading) {
     return <LoadingDots />;
@@ -52,7 +52,7 @@ export default function DashboardProductList({
         <DashboardProductCard
           onEdit={onEdit}
           onDelete={onDelete}
-          isDeleting={isDeleting}
+          isDeleting={deletingId === product.id}
           key={product.id}
           product={product}
         />

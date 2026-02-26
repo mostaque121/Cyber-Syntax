@@ -51,7 +51,9 @@ export default function QuotationConnect({ quotation, orderId }: SectionProps) {
       </div>
 
       <div className="break-togeather">
-        {quotation.notes && <p className="text-sm mt-4">{quotation.notes}</p>}
+        {quotation.notes && (
+          <p className="text-sm mt-4 px-8">{quotation.notes}</p>
+        )}
         <div className="mt-auto ">
           <QuotationFooter />
         </div>

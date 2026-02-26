@@ -49,7 +49,7 @@ export function OrderServices({ services, onAdd, onEdit }: ProductsListProps) {
                 <div className="flex flex-1 flex-col justify-between">
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
-                      <h4 className="font-medium leading-tight truncate">
+                      <h4 className="font-medium leading-tight">
                         {service.name}
                       </h4>
 

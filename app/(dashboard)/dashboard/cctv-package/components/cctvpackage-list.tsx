@@ -12,7 +12,7 @@ interface ProductListProps {
   className?: string;
   onDelete: (id: string) => void;
   onEdit: (id: string) => void;
-  isDeleting?: boolean;
+  deletingId: string | null;
 }
 
 export default function DashboardCctvPackageList({
@@ -23,7 +23,7 @@ export default function DashboardCctvPackageList({
   className,
   onEdit,
   onDelete,
-  isDeleting,
+  deletingId,
 }: ProductListProps) {
   if (isLoading) {
     return <LoadingDots />;
@@ -52,7 +52,7 @@ export default function DashboardCctvPackageList({
         <DashboardCctvPackageCard
           onEdit={onEdit}
           onDelete={onDelete}
-          isDeleting={isDeleting}
+          isDeleting={deletingId === cctvPackage.id}
           key={cctvPackage.id}
           cctvPackage={cctvPackage}
         />

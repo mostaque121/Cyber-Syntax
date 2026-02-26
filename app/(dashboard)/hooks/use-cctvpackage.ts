@@ -14,7 +14,7 @@ export function useCctvPackage(params: {
     return "all";
   })();
 
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["cctv-packages", pageNumber, params.search, params.isAvailable],
     queryFn: () =>
       getCctvPackages({
@@ -32,5 +32,6 @@ export function useCctvPackage(params: {
     isLoading,
     isError,
     error,
+    refetch,
   };
 }

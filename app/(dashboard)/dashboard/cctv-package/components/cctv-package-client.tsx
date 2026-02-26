@@ -1,10 +1,12 @@
 "use client";
 
+import { deleteCctvpackage } from "@/app/(dashboard)/actions/cctv-package-actions";
 import AddEditPanel from "@/components/custom-ui/add-edit-panel";
 import PaginationControl from "@/components/custom-ui/pagination-control";
 import { useUrlParams } from "@/hooks/use-url-params";
-import { useQueryClient } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { useMemo, useState } from "react";
+import { toast } from "sonner";
 import { useCctvPackage } from "../../../hooks/use-cctvpackage";
 import { AddCctvPackageBtn } from "./add-cctvpackage-btn";
 import { CctvPackageForm } from "./cctv-package-form";
@@ -12,22 +14,33 @@ import DashboardCctvPackageList from "./cctvpackage-list";
 import DashBoardCctvPackageFilter from "./filter-cctvpackage";
 
 export function CctvPackageClient() {
-  const queryClient = useQueryClient();
   const { searchParams, setParam } = useUrlParams();
   const editId = searchParams.get("editPackage");
   const limit = 20;
-
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const page = searchParams.get("page");
   const search = searchParams.get("search");
   const isAvailable = searchParams.get("isAvailable");
 
-  const { cctvPackages, pagination, isLoading, isError, error } =
+  const { cctvPackages, refetch, pagination, isLoading, isError, error } =
     useCctvPackage({
       page,
       limit,
       search,
       isAvailable,
     });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: string) => deleteCctvpackage(id),
+    onSuccess: () => {
+      toast.success("Deleted successfully");
+      refetch();
+    },
+    onError: (err) => {
+      console.error(err);
+      toast.error("Failed to delete CCTV Package");
+    },
+  });
 
   const editItem = useMemo(
     () => cctvPackages.find((p) => p.id === editId),
@@ -46,7 +59,16 @@ export function CctvPackageClient() {
 
   const handleSuccess = () => {
     handleClose();
-    queryClient.invalidateQueries({ queryKey: ["cctv-packages"] });
+    refetch();
+  };
+
+  const handleDelete = (id: string) => {
+    setDeletingId(id);
+    deleteMutation.mutate(id, {
+      onSettled: () => {
+        setDeletingId(null);
+      },
+    });
   };
 
   return (
@@ -55,7 +77,7 @@ export function CctvPackageClient() {
         <h1 className="font-bold text-2xl ">Manage CCTV Package</h1>
         <AddCctvPackageBtn
           onSuccess={() => {
-            queryClient.invalidateQueries({ queryKey: ["cctv-packages"] });
+            refetch();
           }}
           className="text-right"
         />
@@ -70,8 +92,8 @@ export function CctvPackageClient() {
       <DashboardCctvPackageList
         className="mt-6"
         isLoading={isLoading}
-        isDeleting={false}
-        onDelete={() => {}}
+        deletingId={deletingId}
+        onDelete={handleDelete}
         onEdit={handleEdit}
         isError={isError}
         error={error}
