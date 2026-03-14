@@ -88,7 +88,7 @@ export function OrderProducts({ products, onAdd, onEdit }: ProductsListProps) {
                   <div className="flex items-center justify-between mt-2">
                     <div className="flex items-center gap-2">
                       <Badge variant="outline" className="text-xs">
-                        Qty: {product.quantity}
+                        Qty: {product.quantity} {product.unit}
                       </Badge>
 
                       {product.warranty && (

@@ -14,6 +14,7 @@ export default function QuotationTo({ billingTo }: SectionProps) {
         )}
         <p className="mt-0.5 text-sm">{billingTo.fullAddress}</p>
         <p className="mt-0.5 text-sm">{billingTo.emailAddress}</p>
+        <p className="mt-0.5 text-sm">{billingTo.phoneNumber}</p>
       </div>
     </div>
   );

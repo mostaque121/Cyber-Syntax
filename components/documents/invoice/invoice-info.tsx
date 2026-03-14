@@ -40,7 +40,7 @@ export default function InvoiceInfo({
           <tr>
             <td colSpan={2}>
               <div className="mt-2 bg-gray-200 font-bold py-1 px-2">
-                Amount Due (BDT): {amountDue}
+                Amount Due (BDT): {amountDue.toFixed(0)}
               </div>
             </td>
           </tr>

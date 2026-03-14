@@ -15,6 +15,8 @@ export interface OrderProduct {
   price: number;
   total: number;
   warranty?: string;
+  index: number;
+  unit: string | null;
 }
 export interface OrderService {
   name: string;

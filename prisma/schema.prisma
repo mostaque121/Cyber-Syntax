@@ -148,6 +148,8 @@ model ServiceOrder {
   name               String
   price              Float      @default(0)
   additionalData     Json?
+
+  index         Int      @default(1)
 }
 
 model Order {
@@ -199,6 +201,9 @@ model ProductOrder {
   serialNumber  String   @default("1")
   price         Float
   quantity      Int      @default(1)
+  unit          String?
+
+  index         Int      @default(1)
 }
 
 model Payment {

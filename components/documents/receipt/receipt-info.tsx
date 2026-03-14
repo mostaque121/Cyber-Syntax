@@ -32,19 +32,15 @@ export default function ReceiptInfo({
             <td className="font-bold pr-2">Issued Date :</td>
             <td>{format(issuedDate, "MMMM d, yyyy")}</td>
           </tr>
-          <tr>
-            <td className="font-bold pr-2">Payment Date :</td>
-            <td>{format(paymentDate, "MMMM d, yyyy")}</td>
-          </tr>
 
           <tr>
             <td colSpan={2}>
               <div className="mt-2 bg-gray-200 font-bold py-1 px-2">
-                Paid Amount (BDT): {paidAmount}
+                Paid Amount (BDT): {paidAmount.toFixed(0)}
               </div>
               {due > 0 && (
                 <div className="mt-2 bg-gray-200 font-bold py-1 px-2">
-                  Due: {due}
+                  Due (BDT): {due.toFixed(0)}
                 </div>
               )}
             </td>

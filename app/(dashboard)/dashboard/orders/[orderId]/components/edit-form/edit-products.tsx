@@ -42,7 +42,9 @@ export default function EditProduct({
       productName: initialItem.productName,
       serialNumber: initialItem.serialNumber || "",
       quantity: initialItem.quantity,
+      unit: initialItem.unit || "",
       price: initialItem.price,
+      index: initialItem.index,
       warranty: initialItem.warranty || "",
     },
   });
@@ -131,12 +133,39 @@ export default function EditProduct({
               />
               <FormField
                 control={form.control}
+                name="unit"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Unit (Optional)</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="pcs" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
                 name="price"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Price</FormLabel>
                     <FormControl>
                       <NumberInput {...field} value={field.value ?? 0} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="index"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Priority</FormLabel>
+                    <FormControl>
+                      <NumberInput {...field} value={field.value ?? 1} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

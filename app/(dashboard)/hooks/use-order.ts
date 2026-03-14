@@ -61,6 +61,39 @@ export function useOrderById(orderId: string) {
     select: (order) => {
       if (!order) return undefined;
 
+      const orderProductLookup = new Map(
+        order.productOrders.map((product) => [
+          `${product.productName}::${product.serialNumber}`,
+          product,
+        ]),
+      );
+
+      const hydrateOrderProducts = (
+        orderProducts:
+          | Invoice["orderProducts"]
+          | Quotation["orderProducts"]
+          | Receipt["orderProducts"]
+          | undefined,
+      ) => {
+        const source =
+          orderProducts && orderProducts.length > 0
+            ? orderProducts
+            : order.productOrders;
+
+        return source.map((item, itemIndex) => {
+          const matched =
+            orderProductLookup.get(
+              `${item.productName}::${item.serialNumber}`,
+            ) ?? order.productOrders[itemIndex];
+
+          return {
+            ...item,
+            unit: item.unit ?? matched?.unit ?? null,
+            index: item.index ?? matched?.index ?? itemIndex + 1,
+          };
+        });
+      };
+
       const mappedDocs: Partial<Record<DocumentType, Document>> = {
         QUOTATION: undefined,
         INVOICE: undefined,
@@ -83,11 +116,16 @@ export function useOrderById(orderId: string) {
             break;
         }
 
+        const hydratedData = {
+          ...data,
+          orderProducts: hydrateOrderProducts(data.orderProducts),
+        } as Invoice | Quotation | Receipt;
+
         mappedDocs[type] = {
           type,
           id: doc.id,
           orderId: doc.orderId,
-          data,
+          data: hydratedData,
           issuedBy: {
             id: doc.issuedBy.id,
             name: doc.issuedBy.name,
@@ -96,7 +134,15 @@ export function useOrderById(orderId: string) {
           updatedAt: doc.updatedAt,
         };
       });
-
+      console.log(
+        "order.productOrders",
+        order.productOrders?.map((product) => ({
+          id: product.id,
+          productName: product.productName,
+          unit: product.unit,
+          index: product.index,
+        })),
+      );
       return {
         ...order,
         mappedDocuments: mappedDocs,

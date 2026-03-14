@@ -85,7 +85,7 @@ export async function fetchOrders({
   };
 }
 export async function fetchOrderById(orderId: string) {
-  return prisma.order.findUnique({
+  const order = await prisma.order.findUnique({
     where: { orderId },
     include: {
       documents: {
@@ -96,12 +96,16 @@ export async function fetchOrderById(orderId: string) {
       payments: true,
       serviceOrders: true,
       productOrders: {
+        orderBy: {
+          index: "asc",
+        },
         include: {
           product: true,
         },
       },
     },
   });
+  return order;
 }
 export async function updateOrderCustomerInfo(
   orderId: string,
@@ -241,9 +245,11 @@ export async function addProductsToOrder({
       productName: p.productName,
       serialNumber: p.serialNumber,
       quantity: p.quantity,
+      unit: p.unit ?? null,
       price: p.price,
       productId: p.productId ?? null,
       warranty: p.warranty ?? null,
+      index: p.index ?? 1,
     }));
 
     // Insert all items

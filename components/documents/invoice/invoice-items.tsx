@@ -25,6 +25,16 @@ export default function InvoiceItems({
   paid = 0,
 }: SectionProps) {
   const safeNumber = (value?: number) => value ?? 0;
+  const getPriority = (index?: number) => {
+    if (!index || index <= 0) return 1;
+    return index;
+  };
+
+  const sortedOrderProducts = [...orderProducts].sort((a, b) => {
+    const priorityDiff = getPriority(a.index) - getPriority(b.index);
+    if (priorityDiff !== 0) return priorityDiff;
+    return a.productName.localeCompare(b.productName);
+  });
 
   const calculate = calculateOrderTotal({
     productOrders: orderProducts,
@@ -68,7 +78,7 @@ export default function InvoiceItems({
           </tr>
         </thead>
         <tbody className="text-sm">
-          {orderProducts.map((item, idx) => (
+          {sortedOrderProducts.map((item, idx) => (
             <tr key={idx} className="hover:bg-gray-100 border-b">
               <td className="pl-8 pr-4 py-2 text-center">{idx + 1}</td>
               <td className="px-4 py-2 text-left">
@@ -76,12 +86,15 @@ export default function InvoiceItems({
                 <p className="text-xs text-gray-500">{item.serialNumber}</p>
               </td>
               <td className="px-4 py-2 text-right">{item.warranty}</td>
-              <td className="px-4 py-2 text-right">{item.quantity}</td>
+              <td className="px-4 py-2 text-right">
+                {item.quantity}
+                {item.unit && item.unit}
+              </td>
               <td className="px-4 py-2 text-right">
                 {formatPrice(item.price)}
               </td>
               <td className="pr-8 pl-4 py-2 text-right">
-                {formatPrice(item.price * item.quantity)}
+                {formatPrice(item.price * item.quantity)}{" "}
               </td>
             </tr>
           ))}
@@ -123,7 +136,7 @@ export default function InvoiceItems({
           )}
           {totalTax > 0 && (
             <div className="flex justify-end px-3 py-1">
-              <span className="text-right">Tax ({taxLabel})</span>
+              <span className="text-right">VAT & Tax ({taxLabel})</span>
               <span className="w-22 text-right">{formatPrice(totalTax)}</span>
             </div>
           )}

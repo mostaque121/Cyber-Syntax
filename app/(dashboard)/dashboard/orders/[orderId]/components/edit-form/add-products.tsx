@@ -40,8 +40,10 @@ export default function AddProducts({
           productName: "",
           serialNumber: "",
           quantity: 1,
+          unit: "",
           price: 0,
           warranty: "",
+          index: 1,
         },
       ],
     },
@@ -70,8 +72,10 @@ export default function AddProducts({
       productName: "",
       serialNumber: "",
       quantity: 1,
+      unit: "",
       price: 0,
       warranty: "",
+      index: fields.length + 1,
     });
   };
 
@@ -141,6 +145,19 @@ export default function AddProducts({
                         </FormItem>
                       )}
                     />
+                    <FormField
+                      control={form.control}
+                      name={`products.${index}.unit`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Unit (Optional)</FormLabel>
+                          <FormControl>
+                            <Input {...field} placeholder="pcs" />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
                     <FormField
                       control={form.control}
@@ -150,6 +167,20 @@ export default function AddProducts({
                           <FormLabel>Price</FormLabel>
                           <FormControl>
                             <NumberInput {...field} value={field.value ?? 0} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name={`products.${index}.index`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Priority</FormLabel>
+                          <FormControl>
+                            <NumberInput {...field} value={field.value ?? 1} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

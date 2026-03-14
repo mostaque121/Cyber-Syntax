@@ -17,22 +17,12 @@ import { type UseFormReturn } from "react-hook-form";
 const BANK_OPTIONS = [
   {
     id: "bank1",
-    title: "Bank of America",
+    title: "Islami Bank Bangladesh PLC.",
     defaultValues: {
-      bankName: "Bank of America",
-      accountName: "Your Company",
-      accountNumber: "123456789",
-      routingNumber: "987654321",
-    },
-  },
-  {
-    id: "bank2",
-    title: "Chase Bank",
-    defaultValues: {
-      bankName: "Chase Bank",
-      accountName: "Your Company",
-      accountNumber: "111222333",
-      routingNumber: "444555666",
+      bankName: "Islami Bank Bangladesh PLC.",
+      accountName: "Cyber Syntax and Engineering Ltd.",
+      accountNumber: "20502240100199115",
+      routingNumber: "125262149",
     },
   },
 ];
@@ -73,19 +63,19 @@ export function PaymentInstructionsStep({
   // --- Bank Payment (exclusive selection like radio) ---
   const handleBankSelection = (
     bank: (typeof BANK_OPTIONS)[number],
-    checked: boolean
+    checked: boolean,
   ) => {
     setValue(
       "paymentInstructions.bankDetails",
       checked ? bank.defaultValues : undefined,
-      { shouldValidate: true }
+      { shouldValidate: true },
     );
   };
 
   // --- Mobile Payment (checkbox style multi-select) ---
   const handleMobileToggle = (
     mp: (typeof MOBILE_OPTIONS)[number],
-    checked: boolean
+    checked: boolean,
   ) => {
     const current = mobilePayments;
     const provider = mp.defaultValues.provider;
@@ -95,14 +85,14 @@ export function PaymentInstructionsStep({
         setValue(
           "paymentInstructions.mobilePayments",
           [...current, mp.defaultValues],
-          { shouldValidate: true }
+          { shouldValidate: true },
         );
       }
     } else {
       setValue(
         "paymentInstructions.mobilePayments",
         current.filter((m) => m.provider !== provider),
-        { shouldValidate: true }
+        { shouldValidate: true },
       );
     }
   };
@@ -169,7 +159,7 @@ export function PaymentInstructionsStep({
             <div className="space-y-2">
               {MOBILE_OPTIONS.map((mp) => {
                 const isSelected = mobilePayments.some(
-                  (m) => m.provider === mp.defaultValues.provider
+                  (m) => m.provider === mp.defaultValues.provider,
                 );
 
                 return (

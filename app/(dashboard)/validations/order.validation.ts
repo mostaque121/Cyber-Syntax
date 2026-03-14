@@ -33,8 +33,10 @@ export const orderProductSchema = z.object({
   productName: z.string().min(1, "Product name is required"),
   serialNumber: z.string().min(1, "Serial number is required"),
   quantity: z.number().min(1, "Quantity must be at least 1"),
+  unit: z.string().optional(),
   price: z.number().min(0.01, "Price must be greater than 0"),
   warranty: z.string().optional(),
+  index: z.number().min(1).optional(),
 });
 
 export const orderProductListSchema = z.object({
@@ -49,6 +51,7 @@ export const orderServiceSchema = z.object({
   name: z.string().min(1, "Service name is required"),
   serviceType: z.enum(ServiceType, "Invalid service type"),
   price: z.number().min(0.01, "Price must be greater than 0"),
+  index: z.number().optional(),
 });
 
 export const orderServiceListSchema = z.object({
