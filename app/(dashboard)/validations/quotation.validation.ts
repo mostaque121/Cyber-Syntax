@@ -61,11 +61,13 @@ export const orderProductsSchema = z.object({
         quantity: z
           .number("Quantity is required")
           .min(1, "Quantity must be at least 1"),
+        unit: z.string().optional().nullable(),
         price: z
           .number("Price is required")
           .min(0, "Price must be a positive number"),
         warranty: z.string().optional().nullable(),
-      })
+        index: z.number().min(1, "Priority must be at least 1").optional(),
+      }),
     )
     .optional(),
 });
@@ -83,7 +85,7 @@ export const orderServicesSchema = z.object({
         price: z
           .number("Service price is required")
           .min(0, "Price must be a positive number"),
-      })
+      }),
     )
     .optional(),
 });

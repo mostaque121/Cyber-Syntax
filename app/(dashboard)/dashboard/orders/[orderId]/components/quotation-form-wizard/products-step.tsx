@@ -40,8 +40,10 @@ export function ProductsStep({ form }: ProductsStepProps) {
               productName: "",
               serialNumber: "",
               quantity: 1,
+              unit: "",
               price: 0,
               warranty: "",
+              index: fields.length + 1,
             })
           }
         >
@@ -84,7 +86,7 @@ export function ProductsStep({ form }: ProductsStepProps) {
               />
             </div>
 
-            <div className="grid gap-4 items-start grid-cols-1 md:grid-cols-3">
+            <div className="grid gap-4 items-start grid-cols-1 md:grid-cols-4">
               {/* Qty */}
               <FormField
                 control={control}
@@ -100,6 +102,25 @@ export function ProductsStep({ form }: ProductsStepProps) {
                 )}
               />
 
+              {/* Unit */}
+              <FormField
+                control={control}
+                name={`orderProducts.${index}.unit`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Unit (Optional)</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="e.g., pcs"
+                        {...field}
+                        value={field.value ?? ""}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               {/* Price */}
               <FormField
                 control={control}
@@ -109,6 +130,25 @@ export function ProductsStep({ form }: ProductsStepProps) {
                     <FormLabel>Price</FormLabel>
                     <FormControl>
                       <NumberInput {...field} min={0} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Priority */}
+              <FormField
+                control={control}
+                name={`orderProducts.${index}.index`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Priority</FormLabel>
+                    <FormControl>
+                      <NumberInput
+                        {...field}
+                        min={1}
+                        value={field.value ?? 1}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

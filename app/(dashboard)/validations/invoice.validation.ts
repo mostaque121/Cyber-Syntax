@@ -61,11 +61,13 @@ export const orderProductsSchema = z.object({
         quantity: z
           .number("Quantity is required")
           .min(1, "Quantity must be at least 1"),
+        unit: z.string().optional().nullable(),
         price: z
           .number("Price is required")
           .min(0, "Price must be a positive number"),
         warranty: z.string().optional().nullable(),
-      })
+        index: z.number().min(1, "Priority must be at least 1").optional(),
+      }),
     )
     .optional(),
 });
@@ -83,7 +85,7 @@ export const orderServicesSchema = z.object({
         price: z
           .number("Service price is required")
           .min(0, "Price must be a positive number"),
-      })
+      }),
     )
     .optional(),
 });
@@ -137,7 +139,7 @@ export const paymentInstructionsSchema = z.object({
             provider: z.string().min(1),
             number: z.string().min(1),
             instructions: z.string().optional(),
-          })
+          }),
         )
         .optional(),
 
@@ -151,7 +153,7 @@ export const paymentInstructionsSchema = z.object({
       {
         message: "You must select at least one payment method",
         path: ["bankDetails"], // can point to bankDetails for error display
-      }
+      },
     ),
 });
 
@@ -161,7 +163,7 @@ export const paymentInstructionsSchema = z.object({
 export const paymentStatusSchema = z.object({
   paymentStatus: z.enum(
     ["PAID", "UNPAID", "PARTIALLY_PAID"],
-    "Payment status is required"
+    "Payment status is required",
   ),
   paidAmount: z.number().min(0, "Paid amount cannot be negative").optional(),
 });

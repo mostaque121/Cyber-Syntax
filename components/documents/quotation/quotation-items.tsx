@@ -129,7 +129,7 @@ export default function QuotationItems({
           )}
           {totalTax > 0 && (
             <div className="flex justify-end px-3 py-1">
-              <span className="text-right">VAT & Tax ({taxLabel})</span>
+              <span className="text-right">VAT ({taxLabel})</span>
               <span className="w-22 text-right">{formatPrice(totalTax)}</span>
             </div>
           )}

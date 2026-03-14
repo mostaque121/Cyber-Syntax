@@ -53,21 +53,11 @@ export default function AddEditPanel({
     };
   }, [isOpen, onClose, disableEscapeKey]);
 
-  // Close when clicking on the overlay backdrop only (more robust)
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (disableOutsideClick) return;
-    // Only close if the click is directly on the overlay, not on modal content or children
-    if (e.currentTarget === e.target) {
-      onClose();
-    }
-  };
-
   if (!isOpen) return null;
 
   return (
     <div
       ref={overlayRef}
-      onClick={handleOverlayClick}
       className="fixed inset-0 z-50 overflow-y-auto bg-[rgba(244,244,244,0.8)] flex justify-center items-start py-10"
       tabIndex={-1}
       aria-modal="true"
